@@ -34,121 +34,119 @@ export default function ZapDashboardPage() {
     const maxMessages = Math.max(...messageVolume.map((d: any) => d.count), 10);
 
     return (
-        <div id="rocha-zap-root">
-            <div className="app-layout">
-                <Sidebar />
-                <main className="main-content">
-                    <MainHeader />
+        <div className="app-layout">
+            <Sidebar />
+            <main className="main-content">
+                <MainHeader />
 
-                    <div className="dashboard-viewport">
-                        <div className="dashboard-title-area">
-                            <h1>Dashboard</h1>
-                            <p className="subtitle">Planeje, priorize e automatize seu atendimento com facilidade.</p>
-                        </div>
-
-                        {loading ? (
-                            <div className="loading-state">
-                                <div className="spinner"></div>
-                            </div>
-                        ) : (
-                            <div className="dashboard-content">
-                                {/* STATS GRID */}
-                                <div className="stats-grid">
-                                    <StatCard
-                                        label="Interações Mensais"
-                                        value={stats.todayMessages || 0}
-                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>}
-                                        trend="+14% vs último mês"
-                                        isPositive={true}
-                                        variant="blue"
-                                    />
-                                    <StatCard
-                                        label="Conversas Ativas"
-                                        value={stats.activeConversations || 0}
-                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>}
-                                        trend="Monitoramento 24/7"
-                                        isPositive={false}
-                                    />
-                                    <StatCard
-                                        label="Total de Leads"
-                                        value={stats.totalContacts || 0}
-                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
-                                        trend="+5.2% esta semana"
-                                        isPositive={true}
-                                    />
-                                    <StatCard
-                                        label="Agendas Pendentes"
-                                        value={stats.pendingSchedules || 0}
-                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>}
-                                        trend="Ação requerida"
-                                        isPositive={false}
-                                        variant="gold"
-                                    />
-                                </div>
-
-                                <div className="main-charts-row">
-                                    <div className="card chart-card">
-                                        <div className="card-header">
-                                            <h3>Análise de Volume</h3>
-                                            <p>Fluxo de mensagens nos últimos 7 dias</p>
-                                        </div>
-                                        <div className="chart-body">
-                                            {messageVolume.length > 0 ? (
-                                                <div className="bar-chart">
-                                                    {messageVolume.map((d: any, i: number) => (
-                                                        <div key={i} className="bar-column">
-                                                            <div
-                                                                className={`bar ${i === messageVolume.length - 1 ? 'active' : ''}`}
-                                                                style={{ height: `${(d.count / maxMessages) * 100}%` }}
-                                                            >
-                                                                <div className="bar-tooltip">{d.count} msgs</div>
-                                                            </div>
-                                                            <span className="bar-label">{d.day.split('-').slice(1).join('/')}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <div className="empty-chart">Sem dados suficientes para gerar o gráfico</div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="card activity-card">
-                                        <div className="card-header">
-                                            <h3>Atividades Recentes</h3>
-                                            <p>Últimos contatos realizados</p>
-                                        </div>
-                                        <div className="activity-list">
-                                            {recentActivity.length > 0 ? (
-                                                recentActivity.map((conv: any) => (
-                                                    <div key={conv.id} className="activity-item">
-                                                        <div className="avatar">
-                                                            {conv.profile_pic ? (
-                                                                <img src={conv.profile_pic} alt="" />
-                                                            ) : (
-                                                                <span>{(conv.name || conv.phone || '?').charAt(0).toUpperCase()}</span>
-                                                            )}
-                                                        </div>
-                                                        <div className="info">
-                                                            <div className="info-top">
-                                                                <span className="name">{conv.name || conv.phone}</span>
-                                                                <span className="time">Agora</span>
-                                                            </div>
-                                                            <p className="preview">{conv.last_message || 'Iniciou uma conversa...'}</p>
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div className="empty-list">Nenhuma atividade recente.</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                <div className="dashboard-viewport">
+                    <div className="dashboard-title-area">
+                        <h1>Dashboard</h1>
+                        <p className="subtitle">Planeje, priorize e automatize seu atendimento com facilidade.</p>
                     </div>
-                </main>
-            </div>
+
+                    {loading ? (
+                        <div className="loading-state">
+                            <div className="spinner"></div>
+                        </div>
+                    ) : (
+                        <div className="dashboard-content">
+                            {/* STATS GRID */}
+                            <div className="stats-grid">
+                                <StatCard
+                                    label="Interações Mensais"
+                                    value={stats.todayMessages || 0}
+                                    icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>}
+                                    trend="+14% vs último mês"
+                                    isPositive={true}
+                                    variant="blue"
+                                />
+                                <StatCard
+                                    label="Conversas Ativas"
+                                    value={stats.activeConversations || 0}
+                                    icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>}
+                                    trend="Monitoramento 24/7"
+                                    isPositive={false}
+                                />
+                                <StatCard
+                                    label="Total de Leads"
+                                    value={stats.totalContacts || 0}
+                                    icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
+                                    trend="+5.2% esta semana"
+                                    isPositive={true}
+                                />
+                                <StatCard
+                                    label="Agendas Pendentes"
+                                    value={stats.pendingSchedules || 0}
+                                    icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>}
+                                    trend="Ação requerida"
+                                    isPositive={false}
+                                    variant="gold"
+                                />
+                            </div>
+
+                            <div className="main-charts-row">
+                                <div className="card chart-card">
+                                    <div className="card-header">
+                                        <h3>Análise de Volume</h3>
+                                        <p>Fluxo de mensagens nos últimos 7 dias</p>
+                                    </div>
+                                    <div className="chart-body">
+                                        {messageVolume.length > 0 ? (
+                                            <div className="bar-chart">
+                                                {messageVolume.map((d: any, i: number) => (
+                                                    <div key={i} className="bar-column">
+                                                        <div
+                                                            className={`bar ${i === messageVolume.length - 1 ? 'active' : ''}`}
+                                                            style={{ height: `${(d.count / maxMessages) * 100}%` }}
+                                                        >
+                                                            <div className="bar-tooltip">{d.count} msgs</div>
+                                                        </div>
+                                                        <span className="bar-label">{d.day.split('-').slice(1).join('/')}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="empty-chart">Sem dados suficientes para gerar o gráfico</div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="card activity-card">
+                                    <div className="card-header">
+                                        <h3>Atividades Recentes</h3>
+                                        <p>Últimos contatos realizados</p>
+                                    </div>
+                                    <div className="activity-list">
+                                        {recentActivity.length > 0 ? (
+                                            recentActivity.map((conv: any) => (
+                                                <div key={conv.id} className="activity-item">
+                                                    <div className="avatar">
+                                                        {conv.profile_pic ? (
+                                                            <img src={conv.profile_pic} alt="" />
+                                                        ) : (
+                                                            <span>{(conv.name || conv.phone || '?').charAt(0).toUpperCase()}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="info">
+                                                        <div className="info-top">
+                                                            <span className="name">{conv.name || conv.phone}</span>
+                                                            <span className="time">Agora</span>
+                                                        </div>
+                                                        <p className="preview">{conv.last_message || 'Iniciou uma conversa...'}</p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="empty-list">Nenhuma atividade recente.</div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </main>
 
             <style jsx>{`
                 .loading-state {
