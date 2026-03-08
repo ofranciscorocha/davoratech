@@ -1,0 +1,202 @@
+[
+    {
+        "id": "marketing",
+        "title": "Rocha Marketing",
+        "description": "Gestão completa de campanhas de E-mail, WhatsApp e SMS Marketing para o setor de leilões.",
+        "icon": "Mail",
+        "href": "/marketing",
+        "status": "active",
+        "order": 1,
+        "labels": []
+    },
+    {
+        "id": "arremate",
+        "title": "Arremate Club",
+        "description": "O motor de busca e agregação de múltiplos pátios em um só lugar. Inteligência total em leilões.",
+        "icon": "Search",
+        "href": "https://www.arremateclub.com.br",
+        "status": "active",
+        "order": 2,
+        "labels": []
+    },
+    {
+        "id": "zap",
+        "title": "Rocha Zap",
+        "description": "Plataforma de automação e atendimento via WhatsApp/Instagram com IA Híbrida (Local/Cloud) e Áudio Selecionável.",
+        "icon": "MessageSquare",
+        "href": "/zap",
+        "status": "active",
+        "order": 3,
+        "labels": []
+    },
+    {
+        "id": "select",
+        "title": "Rocha Select",
+        "description": "Plataforma exclusiva para veículos selecionados e curadoria premium.",
+        "icon": "Zap",
+        "href": "/select",
+        "status": "active",
+        "order": 4,
+        "labels": []
+    },
+    {
+        "id": "recicladora",
+        "title": "Recicladora Rocha",
+        "description": "Sistema de gestão para reciclagem de veículos e geração de certificados de prensa.",
+        "icon": "Recycle",
+        "href": "/recicladora",
+        "status": "active",
+        "order": 5,
+        "labels": []
+    },
+    {
+        "id": "patio",
+        "title": "Pátio Rocha Leilões",
+        "description": "Gestão de pátios e leilões presenciais. (Acesse o Painel Admin para gestão completa)",
+        "icon": "Gavel",
+        "href": "/patiorochaleiloes",
+        "status": "active",
+        "order": 6,
+        "labels": []
+    },
+    {
+        "id": "licitacoes",
+        "title": "Rocha Licitações",
+        "description": "Porta de entrada para o Sistema de Licitações (Licitasistem). Monitoramento e lances automáticos.",
+        "icon": "FileText",
+        "href": "/licitacoes",
+        "status": "active",
+        "order": 7,
+        "labels": []
+    },
+    {
+        "id": "crm",
+        "title": "Rocha CRM",
+        "description": "Gestão de leads e funil de vendas integrado para converter mais clientes.",
+        "icon": "Users",
+        "href": "/crm",
+        "status": "active",
+        "order": 8,
+        "labels": []
+    },
+    {
+        "id": "laura-verissimo",
+        "title": "Laura Verissimo Atélie",
+        "description": "Ateliê de pintura em vidro, cristal e porcelana. Peças exclusivas e personalizadas.",
+        "icon": "Palette",
+        "href": "/atelie",
+        "status": "active",
+        "order": 9,
+        "labels": []
+    },
+    {
+        "id": "assurant",
+        "title": "Assurant Inventory",
+        "description": "Controle de estoque de eletrônicos e eletrodomésticos para o parceiro Assurant Seguros.",
+        "icon": "Package",
+        "href": "/assurant",
+        "status": "coming_soon",
+        "order": 10,
+        "labels": []
+    },
+    {
+        "id": "br-acc",
+        "title": "BR/ACC",
+        "description": "Infraestrutura de grafos open-source para inteligência cívica e cruzamento de dados públicos do Brasil.",
+        "icon": "Share2",
+        "href": "/br-acc",
+        "status": "active",
+        "order": 11,
+        "labels": []
+    },
+    {
+        "id": "investigation",
+        "title": "Rocha Investigation",
+        "description": "Sistema de inteligência e OSINT para coleta de dados públicos, análise de perfis e investigação corporativa.",
+        "icon": "SearchCode",
+        "href": "/osint",
+        "status": "active",
+        "order": 12,
+        "labels": []
+    },
+    {
+        "id": "mapa-frota",
+        "title": "Mapa Frota",
+        "description": "Dashboard inteligente da frota veicular do Brasil com dados do DENATRAN. Mapas, filtros e análises.",
+        "icon": "Car",
+        "href": "/mapa-frota",
+        "status": "active",
+        "order": 13,
+        "labels": []
+    },
+    {
+        "id": "consult-car",
+        "title": "Rocha Consult Car",
+        "description": "Consulta veicular completa por placa. Dados SINESP, FIPE, situação e restrições em tempo real.",
+        "icon": "CarFront",
+        "href": "/consult-car",
+        "status": "active",
+        "order": 14,
+        "labels": []
+    },
+    {
+        "id": "crlv",
+        "title": "CRLV Downloader",
+        "description": "Download automático de CRLV Digital em lote diretamente do portal SENATRAN/SERPRO.",
+        "icon": "FileText",
+        "href": "/crlv",
+        "status": "active",
+        "order": 15,
+        "labels": []
+    },
+    {
+        "id": "deep",
+        "title": "Rocha Deep",
+        "description": "Clonagem de rosto e voz em tempo real. Tecnologia avançada de deepfake para vídeos e lives.",
+        "icon": "UserCircle",
+        "href": "/deep",
+        "status": "active",
+        "order": 16,
+        "labels": []
+    },
+    {
+        "id": "localai",
+        "title": "LocalAI Control",
+        "description": "Backend local de inteligência artificial para processamento de LLM, STT e TTS sem dependência de nuvem.",
+        "icon": "Cpu",
+        "href": "/localai",
+        "status": "active",
+        "order": 17,
+        "labels": []
+    },
+    {
+        "id": "opencode",
+        "title": "OpenCode",
+        "description": "Ferramenta de desenvolvimento e análise de código open-source integrada ao ecossistema.",
+        "icon": "Code2",
+        "href": "/opencode",
+        "status": "coming_soon",
+        "order": 18,
+        "labels": []
+    },
+    {
+        "id": "langflow",
+        "title": "Langflow",
+        "description": "Interface visual para construção de fluxos de IA e orquestração de agentes.",
+        "icon": "Workflow",
+        "href": "/langflow",
+        "status": "coming_soon",
+        "order": 19,
+        "labels": []
+    },
+    {
+        "id": "settings",
+        "title": "Configurações",
+        "description": "Personalize o Hub, troque a logo e ajuste as preferências globais.",
+        "icon": "Settings",
+        "href": "/settings",
+        "status": "active",
+        "order": 20,
+        "labels": []
+    }
+]
