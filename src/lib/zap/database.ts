@@ -10,29 +10,29 @@ const DB_PATH = path.join(process.cwd(), 'data', 'rochazap.db');
 // Ensure data directory exists
 const dataDir = path.dirname(DB_PATH);
 if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  fs.mkdirSync(dataDir, { recursive: true });
 }
 
 let db: any;
 
 export function getDatabase() {
-    try {
-        if (!db) {
-            db = new Database(DB_PATH);
-            db.pragma('journal_mode = WAL');
-            db.pragma('foreign_keys = ON');
-            initializeDatabase(db);
-        }
-        return db;
-    } catch (error) {
-        console.error('[DB] CRITICAL ERROR:', error);
-        throw error;
+  try {
+    if (!db) {
+      db = new Database(DB_PATH);
+      db.pragma('journal_mode = WAL');
+      db.pragma('foreign_keys = ON');
+      initializeDatabase(db);
     }
+    return db;
+  } catch (error) {
+    console.error('[DB] CRITICAL ERROR:', error);
+    throw error;
+  }
 }
 
 function initializeDatabase(db: any) {
-    // Initial schema creation (already has logic from Rocha Zap)
-    db.exec(`
+  // Initial schema creation (already has logic from Rocha Zap)
+  db.exec(`
       CREATE TABLE IF NOT EXISTS tenants (
         id TEXT PRIMARY KEY,
         name TEXT NOT NULL,
@@ -149,12 +149,29 @@ function initializeDatabase(db: any) {
         updated_at TEXT DEFAULT (datetime('now')),
         PRIMARY KEY (tenant_id, key)
       );
+
+      CREATE TABLE IF NOT EXISTS schedules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tenant_id TEXT NOT NULL,
+        contact_id TEXT,
+        contact_name TEXT,
+        contact_phone TEXT,
+        title TEXT NOT NULL,
+        description TEXT,
+        date TEXT NOT NULL,
+        time TEXT NOT NULL,
+        duration INTEGER DEFAULT 30,
+        status TEXT DEFAULT 'pending',
+        agent_type TEXT DEFAULT 'commercial',
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      );
     `);
 
-    // Master seed
-    const masterTenantId = 'tenant-master';
-    db.prepare("INSERT OR IGNORE INTO tenants (id, name, slug) VALUES (?, ?, ?)")
-        .run(masterTenantId, 'Master Admin', 'master');
+  // Master seed
+  const masterTenantId = 'tenant-master';
+  db.prepare("INSERT OR IGNORE INTO tenants (id, name, slug) VALUES (?, ?, ?)")
+    .run(masterTenantId, 'Master Admin', 'master');
 }
 
 export default getDatabase;

@@ -17,119 +17,146 @@ export default function ZapDashboardPage() {
     const fetchDashboard = async () => {
         try {
             const res = await fetch('/api/zap/dashboard');
-            const json = await res.json();
-            setData(json);
+            if (res.ok) {
+                const json = await res.json();
+                setData(json);
+            }
         } catch (e) {
-            console.error('Dashboard error:', e);
+            console.error('Dashboard fetch error:', e);
         } finally {
             setLoading(false);
         }
     };
 
     const stats = data?.stats || {};
-    const maxMessages = Math.max(...(data?.messagesPerDay || [{ count: 1 }]).map((d: any) => d.count), 1);
+    const recentActivity = data?.recentConversations || [];
+    const messageVolume = data?.messagesPerDay || [];
+    const maxMessages = Math.max(...messageVolume.map((d: any) => d.count), 10);
 
     return (
-        <div className="app-layout">
-            <Sidebar />
-            <main className="main-content">
-                <MainHeader />
+        <div id="rocha-zap-root">
+            <div className="app-layout">
+                <Sidebar />
+                <main className="main-content">
+                    <MainHeader />
 
-                <div className="dashboard-viewport">
-                    <div className="dashboard-title-area">
-                        <h1>Dashboard</h1>
-                        <p className="subtitle">Planeje, priorize e automatize seu atendimento com facilidade.</p>
-                    </div>
-
-                    {loading ? (
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-                            <div className="spinner"></div>
+                    <div className="dashboard-viewport">
+                        <div className="dashboard-title-area">
+                            <h1>Dashboard</h1>
+                            <p className="subtitle">Planeje, priorize e automatize seu atendimento com facilidade.</p>
                         </div>
-                    ) : (
-                        <>
-                            <div className="stats-grid">
-                                <StatCard
-                                    label="Interações Mensais"
-                                    value={stats.todayMessages || 0}
-                                    icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>}
-                                    trend="+14% vs último mês"
-                                    isPositive={true}
-                                    variant="blue"
-                                />
-                                <StatCard
-                                    label="Conversas Ativas"
-                                    value={stats.activeConversations || 0}
-                                    icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>}
-                                    trend="Monitoramento em tempo real"
-                                    isPositive={false}
-                                />
-                                <StatCard
-                                    label="Total de Leads"
-                                    value={stats.totalContacts || 0}
-                                    icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
-                                    trend="+5% crescimento constante"
-                                    isPositive={true}
-                                />
-                                <StatCard
-                                    label="Agendas Pendentes"
-                                    value={stats.pendingSchedules || 0}
-                                    icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>}
-                                    trend="Ação requerida"
-                                    isPositive={false}
-                                    variant="gold"
-                                />
-                            </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '32px' }}>
-                                <div className="card">
-                                    <div className="card-header">
-                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>Análise de Volume</h3>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Fluxo de mensagens nos últimos 7 dias</p>
-                                    </div>
-                                    <div className="chart-container" style={{ display: 'flex', alignItems: 'end', gap: '12px', height: '240px' }}>
-                                        {(data?.messagesPerDay || []).map((d: any, i: number) => (
-                                            <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                                                <div
-                                                    className="chart-bar"
-                                                    style={{ height: `${Math.max((d.count / maxMessages) * 200, 5)}px`, width: '100%', maxWidth: '30px' }}
-                                                    title={`${d.day}: ${d.count}`}
-                                                ></div>
-                                                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)' }}>{d.day?.slice(5)}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                        {loading ? (
+                            <div className="loading-state">
+                                <div className="spinner"></div>
+                            </div>
+                        ) : (
+                            <div className="dashboard-content">
+                                {/* STATS GRID */}
+                                <div className="stats-grid">
+                                    <StatCard
+                                        label="Interações Mensais"
+                                        value={stats.todayMessages || 0}
+                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>}
+                                        trend="+14% vs último mês"
+                                        isPositive={true}
+                                        variant="blue"
+                                    />
+                                    <StatCard
+                                        label="Conversas Ativas"
+                                        value={stats.activeConversations || 0}
+                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>}
+                                        trend="Monitoramento 24/7"
+                                        isPositive={false}
+                                    />
+                                    <StatCard
+                                        label="Total de Leads"
+                                        value={stats.totalContacts || 0}
+                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
+                                        trend="+5.2% esta semana"
+                                        isPositive={true}
+                                    />
+                                    <StatCard
+                                        label="Agendas Pendentes"
+                                        value={stats.pendingSchedules || 0}
+                                        icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>}
+                                        trend="Ação requerida"
+                                        isPositive={false}
+                                        variant="gold"
+                                    />
                                 </div>
 
-                                <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                                    <div className="card-header" style={{ padding: '24px 24px 0' }}>
-                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>Atividades Recentes</h3>
-                                    </div>
-                                    <div style={{ marginTop: '12px' }}>
-                                        {(data?.recentConversations || []).slice(0, 5).map((conv: any) => (
-                                            <div key={conv.id} className="conversation-item" style={{ borderBottom: '1px solid var(--border-color)', padding: '16px 24px' }}>
-                                                <div className="conversation-avatar" style={{ borderRadius: '50%', background: 'var(--bg-tertiary)', color: 'var(--gold-primary)', width: '38px', height: '38px' }}>
-                                                    {(conv.name || '?').charAt(0).toUpperCase()}
+                                <div className="main-charts-row">
+                                    <div className="card chart-card">
+                                        <div className="card-header">
+                                            <h3>Análise de Volume</h3>
+                                            <p>Fluxo de mensagens nos últimos 7 dias</p>
+                                        </div>
+                                        <div className="chart-body">
+                                            {messageVolume.length > 0 ? (
+                                                <div className="bar-chart">
+                                                    {messageVolume.map((d: any, i: number) => (
+                                                        <div key={i} className="bar-column">
+                                                            <div
+                                                                className={`bar ${i === messageVolume.length - 1 ? 'active' : ''}`}
+                                                                style={{ height: `${(d.count / maxMessages) * 100}%` }}
+                                                            >
+                                                                <div className="bar-tooltip">{d.count} msgs</div>
+                                                            </div>
+                                                            <span className="bar-label">{d.day.split('-').slice(1).join('/')}</span>
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                                <div className="conversation-info">
-                                                    <div className="name" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                        <span style={{ color: '#fff' }}>{conv.name || conv.phone}</span>
-                                                        <span className={`agent-badge agent-${conv.current_agent || 'success'}`}>
-                                                            {conv.current_agent || 'IA'}
-                                                        </span>
+                                            ) : (
+                                                <div className="empty-chart">Sem dados suficientes para gerar o gráfico</div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="card activity-card">
+                                        <div className="card-header">
+                                            <h3>Atividades Recentes</h3>
+                                            <p>Últimos contatos realizados</p>
+                                        </div>
+                                        <div className="activity-list">
+                                            {recentActivity.length > 0 ? (
+                                                recentActivity.map((conv: any) => (
+                                                    <div key={conv.id} className="activity-item">
+                                                        <div className="avatar">
+                                                            {conv.profile_pic ? (
+                                                                <img src={conv.profile_pic} alt="" />
+                                                            ) : (
+                                                                <span>{(conv.name || conv.phone || '?').charAt(0).toUpperCase()}</span>
+                                                            )}
+                                                        </div>
+                                                        <div className="info">
+                                                            <div className="info-top">
+                                                                <span className="name">{conv.name || conv.phone}</span>
+                                                                <span className="time">Agora</span>
+                                                            </div>
+                                                            <p className="preview">{conv.last_message || 'Iniciou uma conversa...'}</p>
+                                                        </div>
                                                     </div>
-                                                    <div className="preview">{conv.last_message || 'Iniciou contato agora'}</div>
-                                                </div>
-                                            </div>
-                                        ))}
+                                                ))
+                                            ) : (
+                                                <div className="empty-list">Nenhuma atividade recente.</div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </>
-                    )}
-                </div>
-            </main>
+                        )}
+                    </div>
+                </main>
+            </div>
 
             <style jsx>{`
+                .loading-state {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 400px;
+                }
                 .spinner {
                     width: 48px;
                     height: 48px;
@@ -139,6 +166,111 @@ export default function ZapDashboardPage() {
                     animation: spin 1s linear infinite;
                 }
                 @keyframes spin { to { transform: rotate(360deg); } }
+
+                .main-charts-row {
+                    display: grid;
+                    grid-template-columns: 1.5fr 1fr;
+                    gap: 32px;
+                }
+
+                .card-header {
+                    margin-bottom: 32px;
+                }
+                .card-header h3 {
+                    font-size: 1.25rem;
+                    font-weight: 800;
+                    margin: 0 0 6px;
+                }
+                .card-header p {
+                    font-size: 0.85rem;
+                    color: var(--text-muted);
+                    margin: 0;
+                }
+
+                .chart-body {
+                    height: 280px;
+                    display: flex;
+                    align-items: flex-end;
+                    padding-top: 20px;
+                }
+                .bar-chart {
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    width: 100%;
+                    height: 100%;
+                    gap: 16px;
+                }
+                .bar-column {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 16px;
+                    height: 100%;
+                    justify-content: flex-end;
+                }
+                .bar {
+                    width: 100%;
+                    max-width: 40px;
+                    background: rgba(59, 130, 246, 0.1);
+                    border-radius: 8px;
+                    min-height: 4px;
+                    transition: all 0.3s ease;
+                    position: relative;
+                }
+                .bar.active {
+                    background: var(--gold-primary);
+                    box-shadow: 0 0 20px rgba(201, 160, 91, 0.2);
+                }
+                .bar:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    height: 100% !important; /* Visual effect */
+                }
+                .bar-label {
+                    font-size: 0.65rem;
+                    font-weight: 700;
+                    color: var(--text-muted);
+                }
+
+                .activity-list {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .activity-item {
+                    display: flex;
+                    gap: 16px;
+                    padding: 16px 24px;
+                    border-bottom: 1px solid var(--border-color);
+                    transition: var(--transition);
+                }
+                .activity-item:last-child { border-bottom: none; }
+                .activity-item:hover { background: rgba(255,255,255,0.02); }
+                
+                .avatar {
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 12px;
+                    background: var(--bg-tertiary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    color: var(--gold-primary);
+                    flex-shrink: 0;
+                    border: 1px solid var(--border-color);
+                }
+                .avatar img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
+                
+                .info { flex: 1; overflow: hidden; }
+                .info-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+                .name { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+                .time { font-size: 0.7rem; color: var(--text-muted); }
+                .preview { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+                @media (max-width: 1280px) {
+                    .main-charts-row { grid-template-columns: 1fr; }
+                }
             `}</style>
         </div>
     );
