@@ -10,6 +10,7 @@ git config --global --add safe.directory $RepoDir
 # 2. Sincroniza package-lock.json (Essencial para o Railway)
 Write-Host ">> Sincronizando package-lock.json (Aguarde...)" -ForegroundColor Yellow
 npm install
+npx prisma generate
 
 # 3. Configura o Remote se necessário
 if (-not (Test-Path "$RepoDir\.git")) {
