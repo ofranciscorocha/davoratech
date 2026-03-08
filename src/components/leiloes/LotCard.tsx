@@ -94,4 +94,4 @@ const LotCard = ({ id, title, location, startingBid, currentBid, imageUrl, statu
     );
 };
 
-export { LotCard };
+export default LotCard;

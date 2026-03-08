@@ -45,7 +45,6 @@ export default function SimulatorPage() {
     };
 
     return (
-    return (
         <div className="app-layout">
             <Sidebar />
             <main className="main-content" style={{ display: 'flex', flexDirection: 'column', background: '#efeae2', height: '100vh', padding: 0 }}>
