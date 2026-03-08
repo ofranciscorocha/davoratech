@@ -1,0 +1,25 @@
+/* PATIO ROCHA LEILÕES SCOPED CSS */
+#leiloes-root {
+    --primary: #c9a05b;
+    --brand: #0a1b3f;
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+}
+
+#leiloes-root {
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+}
+
+#leiloes-root .header {
+    background-color: var(--brand);
+    color: white;
+}
+
+#leiloes-root .btn-gold {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Add remaining Leilões styles here, scoped to #leiloes-root */

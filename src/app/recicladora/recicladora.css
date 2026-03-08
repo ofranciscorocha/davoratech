@@ -1,0 +1,34 @@
+/* RECICLADORA ROCHA SCOPED CSS */
+#recicladora-root {
+    --brand-green: #1a4731;
+    --brand-green-dark: #0f2e1f;
+    --brand-lime: #76b139;
+    --brand-lime-light: #8ec448;
+    --background: #f5f8f6;
+    --text-dark: #1a202c;
+}
+
+#recicladora-root {
+    background-color: var(--background);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+#recicladora-root .hero-overlay {
+    background: linear-gradient(135deg, rgba(26, 71, 49, 0.92) 0%, rgba(26, 71, 49, 0.85) 50%, rgba(118, 177, 57, 0.8) 100%);
+}
+
+#recicladora-root .btn-primary {
+    background-color: var(--brand-green);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#recicladora-root .btn-primary:hover {
+    background-color: var(--brand-green-dark);
+    transform: translateY(-2px);
+}
+
+/* Add remaining Recicladora styles here, scoped to #recicladora-root */

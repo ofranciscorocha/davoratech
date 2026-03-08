@@ -1,0 +1,52 @@
+/* MARKETING HUB SCOPED CSS - Consolidating original styles */
+#marketing-root {
+    --marketing-primary: #c5a059;
+    --marketing-dark: #0a192f;
+    --marketing-dark-light: #112240;
+    --marketing-teal: #009688;
+}
+
+#marketing-root {
+    background-color: #f9fafb;
+    color: #1a202c;
+    min-height: 100vh;
+}
+
+#marketing-root .bg-marketing-dark {
+    background-color: var(--marketing-dark);
+}
+
+#marketing-root .text-marketing-gold {
+    color: var(--marketing-primary);
+}
+
+/* Scoped Utility Classes from Original tailwind usage */
+#marketing-root .sidebar-marketing {
+    background: linear-gradient(to bottom, #0a192f, #112240);
+}
+
+#marketing-root .nav-item-active {
+    background-color: var(--marketing-primary);
+    color: var(--marketing-dark);
+}
+
+#marketing-root .card-stat {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations ported from index.css */
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+#marketing-root .animate-marquee {
+    animation: marquee 15s linear infinite;
+}

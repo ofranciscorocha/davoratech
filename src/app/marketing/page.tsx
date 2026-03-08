@@ -1,73 +1,112 @@
 'use client';
+import { useState, useEffect } from 'react';
+import {
+    LayoutDashboard, Calendar, Users, Cake, BarChart3, Settings,
+    PlusCircle, Mail, MessageCircle, CheckCircle2, Clock, Send,
+    Smartphone, ArrowUpDown, UserPlus, Upload, Trash2, Search, X
+} from 'lucide-react';
+import './marketing.css';
 
+/* Ported Marketing Hub from original PatioMarketingHub */
 export default function MarketingPage() {
+    const [activePage, setActivePage] = useState('dashboard');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [campaigns, setCampaigns] = useState<any[]>([]);
+    const [contacts, setContacts] = useState<any[]>([]);
+    const [groups, setGroups] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Initial data fetch would go here
+        setLoading(false);
+    }, []);
+
+    const navItems = [
+        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { id: 'campaigns', label: 'Agendamentos', icon: Calendar },
+        { id: 'contacts', label: 'Contatos', icon: Users },
+        { id: 'birthdays', label: 'Aniversários', icon: Cake },
+        { id: 'reports', label: 'Relatórios', icon: BarChart3 },
+        { id: 'settings', label: 'Configurações', icon: Settings },
+    ];
+
     return (
-        <div className="bg-[#0f172a] min-h-screen text-white p-8">
-            <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-16">
-                    <div className="flex items-center gap-4">
-                        <div className="text-purple-500">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0" /></svg>
-                        </div>
-                        <h1 className="text-2xl font-black uppercase tracking-tight">Rocha Marketing</h1>
-                    </div>
-                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-black shadow-lg shadow-purple-900/20 transition-all">Iniciar Campanha</button>
-                </header>
+        <div id="marketing-root" className="min-h-screen flex flex-col md:flex-row overflow-hidden h-screen font-sans">
+            {/* Sidebar */}
+            <aside className={`
+        fixed inset-y-0 left-0 w-72 sidebar-marketing flex flex-col shadow-2xl z-50 transition-transform duration-300 transform
+        md:relative md:translate-x-0 md:w-64 md:z-auto
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+                <div className="p-6 border-b border-white/10">
+                    <h1 className="text-2xl font-black text-white leading-tight">ROCHA</h1>
+                    <p className="text-[11px] text-marketing-gold font-semibold tracking-wider uppercase">Marketing Hub</p>
+                </div>
 
-                <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
-                    <div>
-                        <h2 className="text-6xl font-black mb-8 tracking-tighter leading-[0.9]">Potencialize seus <span className="text-purple-500">Leilões</span> com Marketing de Dados</h2>
-                        <p className="text-xl text-gray-400 mb-10">Software de automação para campanhas de WhatsApp, E-mail e SMS focado em atrair mais arrematantes para o seu pátio.</p>
-                        <div className="flex gap-4">
-                            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex-1">
-                                <h4 className="text-purple-400 font-black text-2xl mb-1">+15k</h4>
-                                <p className="text-xs text-gray-500 font-bold uppercase">Leads Qualificados</p>
-                            </div>
-                            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex-1">
-                                <h4 className="text-purple-400 font-black text-2xl mb-1">98%</h4>
-                                <p className="text-xs text-gray-500 font-bold uppercase">Taxa de Abertura</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 aspect-video rounded-3xl border border-white/10 flex items-center justify-center relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
-                        <div className="relative z-10 text-center">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-purple-600 shadow-2xl mx-auto mb-4 cursor-pointer hover:scale-110 transition-transform">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                            </div>
-                            <span className="text-xs font-black uppercase tracking-widest text-white/50">Ver Demonstração</span>
-                        </div>
-                    </div>
-                </section>
+                <nav className="flex-1 p-4 space-y-1.5 mt-4">
+                    {navItems.map(item => (
+                        <button
+                            key={item.id}
+                            onClick={() => setActivePage(item.id)}
+                            className={`w-full flex items-center gap-3.5 px-5 py-3.5 rounded-2xl text-[15px] font-bold transition-all ${activePage === item.id
+                                ? 'nav-item-active shadow-lg'
+                                : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                                }`}
+                        >
+                            <item.icon className="w-5 h-5" />
+                            {item.label}
+                        </button>
+                    ))}
+                </nav>
 
-                <section className="bg-white/5 rounded-[40px] p-12 border border-white/10 text-center">
-                    <h3 className="text-3xl font-black mb-4">Escolha seu Canal de Disparo</h3>
-                    <p className="text-gray-500 mb-12">Nossa inteligência artificial escolhe o melhor momento e canal para cada cliente.</p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="p-8 rounded-3xl border border-white/5 hover:border-purple-500/30 transition-all hover:bg-white/[0.02]">
-                            <div className="text-purple-500 mb-6">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7.9.9 0 0 1 1.1 1.3L12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6l.5-1.5a.9.9 0 0 1 1 0z" /><path d="M22 4L12 14.01l-3-3" /></svg>
+                <div className="p-6 border-t border-white/10">
+                    <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-5 border border-white/10">
+                        <p className="text-[10px] font-black text-marketing-gold uppercase tracking-widest opacity-80">Base de Contatos</p>
+                        <p className="text-3xl font-black text-white mt-1.5">0</p>
+                        <p className="text-xs text-gray-400 mt-1 font-medium">0 grupos ativos</p>
+                    </div>
+                </div>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 p-4 md:p-10 overflow-y-auto relative">
+                {activePage === 'dashboard' && (
+                    <div className="space-y-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h2 className="text-4xl font-black text-gray-900 leading-tight">Dashboard</h2>
+                                <p className="text-gray-500 font-medium mt-1">Bem-vindo ao centro de comando Rocha</p>
                             </div>
-                            <h4 className="text-xl font-black mb-2">WhatsApp Direct</h4>
-                            <p className="text-sm text-gray-500">Envios em massa com inteligência anti-bloqueio.</p>
+                            <button className="w-full sm:w-auto bg-teal-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-teal-700 flex items-center justify-center gap-3 shadow-xl shadow-teal-100 transition-all">
+                                <PlusCircle className="w-6 h-6" /> Nova Campanha
+                            </button>
                         </div>
-                        <div className="p-8 rounded-3xl border border-white/5 hover:border-purple-500/30 transition-all hover:bg-white/[0.02]">
-                            <div className="text-purple-500 mb-6">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="bg-blue-600 p-6 rounded-2xl text-white card-stat">
+                                <Mail className="w-8 h-8 opacity-80" />
+                                <p className="text-3xl font-black mt-3">0</p>
+                                <p className="text-sm opacity-90">Emails</p>
                             </div>
-                            <h4 className="text-xl font-black mb-2">Smart E-mail</h4>
-                            <p className="text-sm text-gray-500">Templates dinâmicos com os lotes do dia.</p>
-                        </div>
-                        <div className="p-8 rounded-3xl border border-white/5 hover:border-purple-500/30 transition-all hover:bg-white/[0.02]">
-                            <div className="text-purple-500 mb-6">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                            <div className="bg-emerald-600 p-6 rounded-2xl text-white card-stat">
+                                <MessageCircle className="w-8 h-8 opacity-80" />
+                                <p className="text-3xl font-black mt-3">0</p>
+                                <p className="text-sm opacity-90">WhatsApp</p>
                             </div>
-                            <h4 className="text-xl font-black mb-2">SMS Corporate</h4>
-                            <p className="text-sm text-gray-500">Alertas críticos de lances e finalização de leilões.</p>
+                            <div className="bg-amber-600 p-6 rounded-2xl text-white card-stat">
+                                <CheckCircle2 className="w-8 h-8 opacity-80" />
+                                <p className="text-3xl font-black mt-3">0</p>
+                                <p className="text-sm opacity-90">Concluídas</p>
+                            </div>
+                            <div className="bg-purple-600 p-6 rounded-2xl text-white card-stat">
+                                <Clock className="w-8 h-8 opacity-80" />
+                                <p className="text-3xl font-black mt-3">0</p>
+                                <p className="text-sm opacity-90">Agendadas</p>
+                            </div>
                         </div>
                     </div>
-                </section>
-            </div>
+                )}
+            </main>
         </div>
     );
 }

@@ -28,7 +28,7 @@ const NAV_ITEMS = [
     { label: 'Configurações Avançadas', icon: ICONS.settings, path: '/zap/settings' },
 ];
 
-export default function Sidebar({ stats }: any) {
+export default function Sidebar({ stats }: { stats?: any }) {
     const pathname = usePathname();
     const router = useRouter();
     const [whatsappStatus, setWhatsappStatus] = useState('disconnected');
@@ -72,49 +72,44 @@ export default function Sidebar({ stats }: any) {
         error: 'Erro de Sistema',
     };
 
-    const statusClass = whatsappStatus === 'connected' ? 'bg-green-500' :
-        ['initializing', 'qr_ready', 'authenticated'].includes(whatsappStatus) ? 'bg-amber-500' : 'bg-red-500';
+    const statusClass = whatsappStatus === 'connected' ? 'connected' :
+        ['initializing', 'qr_ready', 'authenticated'].includes(whatsappStatus) ? 'connecting' : '';
 
     return (
-        <aside className="w-72 bg-gray-800 border-r border-gray-700 flex flex-col">
-            <div className="p-8 flex items-center gap-4">
-                <div className="text-teal-500">
+        <aside className="sidebar">
+            <div className="sidebar-logo">
+                <div className="logo-icon" style={{ color: 'var(--gold-primary)' }}>
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
                 </div>
-                <h2 className="text-xl font-black text-white">{botName}</h2>
+                <h2>{botName}</h2>
             </div>
 
-            <div className="px-6 mb-8">
-                <div className="bg-gray-900/50 p-4 rounded-2xl flex items-center gap-4 border border-gray-700">
-                    <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-black">R</div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-bold text-white">Corporativo Rocha</span>
-                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Administrador</span>
-                    </div>
+            <div className="sidebar-profile">
+                <div className="profile-avatar">R</div>
+                <div className="profile-info">
+                    <span className="profile-name">Corporativo Rocha</span>
+                    <span className="profile-role">Administrador</span>
                 </div>
             </div>
 
-            <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-                <div className="px-4 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Navegação Estratégica</div>
+            <nav className="sidebar-nav">
+                <div className="nav-section-title">Navegação Estratégica</div>
                 {NAV_ITEMS.map(item => (
-                    <button
+                    <div
                         key={item.path}
-                        className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${pathname === item.path
-                                ? 'bg-teal-600 text-white shadow-lg shadow-teal-900/20'
-                                : 'text-gray-400 hover:bg-gray-700/50 hover:text-white'
-                            } ${item.disabled ? 'opacity-30 cursor-not-allowed' : ''}`}
+                        className={`nav-item ${pathname === item.path ? 'active' : ''} ${item.disabled ? 'disabled' : ''}`}
                         onClick={() => !item.disabled && router.push(item.path)}
                     >
-                        <span className={`icon ${pathname === item.path ? 'text-white' : 'text-gray-500'}`}>{item.icon}</span>
+                        <span className="icon">{item.icon}</span>
                         <span>{item.label}</span>
-                    </button>
+                    </div>
                 ))}
             </nav>
 
-            <div className="p-6 border-t border-gray-700">
-                <div className="flex items-center gap-3 px-2">
-                    <span className={`w-2.5 h-2.5 rounded-full ${statusClass} animate-pulse`}></span>
-                    <span className="text-xs font-bold text-gray-400">Status: {statusLabel[whatsappStatus] || statusLabel.error}</span>
+            <div className="sidebar-footer">
+                <div className="sidebar-status">
+                    <span className={`status-dot ${statusClass}`}></span>
+                    <span>Status: {statusLabel[whatsappStatus] || statusLabel.error}</span>
                 </div>
             </div>
         </aside>

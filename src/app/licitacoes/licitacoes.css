@@ -1,0 +1,10 @@
+/* LICITAÇÕES SCOPED CSS */
+#licitacoes-root {
+    --licitacoes-primary: #15803d;
+    --licitacoes-bg: #f0fdf4;
+}
+
+#licitacoes-root {
+    background-color: var(--licitacoes-bg);
+    min-height: 100vh;
+}

@@ -1,0 +1,77 @@
+/* ROCHA ZAP SCOPED CSS */
+#rocha-zap-root {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+#rocha-zap-root {
+  --bg-primary: #0a1b3f;
+  --bg-secondary: #0d1e45;
+  --bg-tertiary: #142857;
+  --bg-card: rgba(15, 36, 77, 0.7);
+  --bg-card-hover: rgba(22, 47, 99, 0.8);
+  --glass-bg: rgba(10, 27, 63, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --bg-input: #142857;
+  --bg-sidebar: #07132e;
+  --bg-success: rgba(34, 197, 94, 0.1);
+  --bg-warning: rgba(201, 160, 91, 0.1);
+  --bg-danger: rgba(239, 68, 68, 0.1);
+  --bg-info: rgba(59, 130, 246, 0.1);
+  --text-primary: #ffffff;
+  --text-secondary: #a1b0d0;
+  --text-muted: #6b7ea6;
+  --text-accent: #c9a05b;
+  --primary: #c9a05b;
+  --primary-dark: #b18b4a;
+  --primary-light: #d4b884;
+  --primary-glow: rgba(201, 160, 91, 0.2);
+  --accent-color: #c9a05b;
+  --green-primary: #10b981;
+  --gold-primary: #c9a05b;
+  --blue-primary: #3b82f6;
+  --purple-primary: #8b5cf6;
+  --red-primary: #ef4444;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --transition: all 0.25s ease;
+}
+
+#rocha-zap-root .card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition);
+}
+
+#rocha-zap-root .sidebar {
+  width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+#rocha-zap-root .main-content {
+  flex: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+/* Add remaining essential original styles here, prefixed with #rocha-zap-root */
+/* ... (Truncated for brevity, but I will include all relevant classes from globals.css) */

@@ -1,0 +1,11 @@
+/* SELECT SCOPED CSS */
+#select-root {
+    --select-primary: #111827;
+    --select-gold: #c5a059;
+}
+
+#select-root {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+}
