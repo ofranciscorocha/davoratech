@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/zap/Sidebar';
+import MainHeader from '@/components/zap/MainHeader';
 import MenuBuilder from '@/components/zap/MenuBuilder';
-import '../zap.css';
 
 export default function SettingsPage() {
     const [activeTab, setActiveTab] = useState('general');
@@ -12,17 +12,13 @@ export default function SettingsPage() {
     const [whatsappStatus, setWhatsappStatus] = useState('disconnected');
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [connecting, setConnecting] = useState(false);
-    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
     useEffect(() => {
         fetchSettings();
         checkWhatsApp();
+        const interval = setInterval(checkWhatsApp, 5000);
+        return () => clearInterval(interval);
     }, []);
-
-    const showToast = (message: string, type: 'success' | 'error' = 'success') => {
-        setToast({ message, type });
-        setTimeout(() => setToast(null), 3000);
-    };
 
     const fetchSettings = async () => {
         try {
@@ -41,166 +37,176 @@ export default function SettingsPage() {
             const data = await res.json();
             setWhatsappStatus(data.status || 'disconnected');
             setQrCode(data.qrCode || null);
+            if (data.status === 'connected') setConnecting(false);
         } catch (e) { }
     };
 
-    const connectWhatsApp = async () => {
-        setConnecting(true);
-        setQrCode(null);
+    const handleWhatsAppAction = async (action: 'init' | 'disconnect') => {
+        if (action === 'init') setConnecting(true);
         try {
-            const res = await fetch('/api/zap/whatsapp/connect', { method: 'POST' });
-            const data = await res.json();
-            setWhatsappStatus(data.status || 'initializing');
-            setQrCode(data.qrCode || null);
-
-            const poll = setInterval(async () => {
-                try {
-                    const r = await fetch('/api/zap/whatsapp/status');
-                    const d = await r.json();
-                    setWhatsappStatus(d.status || 'disconnected');
-                    if (d.qrCode) setQrCode(d.qrCode);
-                    if (d.status === 'connected' || d.status === 'error') {
-                        clearInterval(poll);
-                        setConnecting(false);
-                        if (d.status === 'connected') showToast('WhatsApp conectado!');
-                    }
-                } catch (pollErr) { }
-            }, 3000);
+            await fetch('/api/zap/whatsapp/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action }),
+            });
+            setTimeout(checkWhatsApp, 1000);
         } catch (e) {
             setConnecting(false);
-            showToast('Erro ao conectar', 'error');
         }
     };
 
-    const updateSetting = (key: string, value: any) => {
+    const updateSetting = (key: string, value: string) => {
         setSettings((prev: any) => ({ ...prev, [key]: value }));
     };
 
-    const saveSettings = async () => {
+    const saveOneSetting = async (key: string, value: string) => {
         setSaving(true);
         try {
-            const settingsArray = Object.entries(settings).map(([key, value]) => ({
-                key,
-                value: String(value ?? ''),
-                category: key.startsWith('openai_') || key.startsWith('ai_') ? 'api' :
-                    key.startsWith('whatsapp_') ? 'whatsapp' : 'general'
-            }));
-
-            const res = await fetch('/api/zap/settings', {
-                method: 'PUT',
+            await fetch('/api/zap/settings', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ settings: settingsArray }),
+                body: JSON.stringify({ key, value }),
             });
-
-            if (!res.ok) throw new Error('Falha ao salvar');
-            showToast('Configurações salvas com sucesso!');
-        } catch (e) {
-            showToast('Erro ao salvar', 'error');
-        }
+        } catch (e) { }
         setSaving(false);
     };
 
     return (
-        <div id="rocha-zap-root">
-            <div className="app-layout">
-                <Sidebar />
-                <main className="main-content">
+        <div className="app-layout">
+            <Sidebar />
+            <main className="main-content">
+                <MainHeader />
+                <div className="dashboard-viewport">
                     <div className="page-header">
                         <div>
-                            <h1 className="flex items-center gap-3">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
-                                Configurações Avançadas
-                            </h1>
-                            <p className="subtitle">Parametrização global e conectividade estratégica</p>
+                            <h1>Configurações</h1>
+                            <p className="subtitle">Gerencie sua conectividade e inteligência artificial.</p>
                         </div>
-                        <button className="bg-[#c9a05b] text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg hover:scale-105 transition-all disabled:opacity-50" onClick={saveSettings} disabled={saving}>
-                            {saving ? 'Sincronizando...' : 'Salvar Alterações'}
-                        </button>
                     </div>
 
                     <div className="page-body">
-                        <div className="flex gap-8 border-b border-white/5 mb-8">
-                            <button className={`pb-4 px-2 text-sm font-bold transition-all border-b-2 ${activeTab === 'general' ? 'border-[#c9a05b] text-[#c9a05b]' : 'border-transparent text-gray-500'}`} onClick={() => setActiveTab('general')}>Geral & IA</button>
-                            <button className={`pb-4 px-2 text-sm font-bold transition-all border-b-2 ${activeTab === 'flow' ? 'border-[#c9a05b] text-[#c9a05b]' : 'border-transparent text-gray-500'}`} onClick={() => setActiveTab('flow')}>Fluxos de Atendimento</button>
+                        <div className="toolbar" style={{ borderBottom: '1px solid var(--border-color)', marginBottom: '32px', paddingBottom: '0' }}>
+                            <button className={`tab-btn ${activeTab === 'general' ? 'active' : ''}`} onClick={() => setActiveTab('general')}>Geral & Conectividade</button>
+                            <button className={`tab-btn ${activeTab === 'flow' ? 'active' : ''}`} onClick={() => setActiveTab('flow')}>Fluxos de Menus</button>
                         </div>
 
-                        {loading ? (
-                            <div className="py-20 flex justify-center"><div className="w-10 h-10 border-4 border-[#c9a05b]/20 border-t-[#c9a05b] rounded-full animate-spin"></div></div>
-                        ) : activeTab === 'general' ? (
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* WhatsApp Connection */}
-                                <div className="card space-y-6">
-                                    <div className="flex justify-between items-center">
-                                        <h3 className="font-bold text-white uppercase text-xs tracking-widest">WhatsApp Business</h3>
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${whatsappStatus === 'connected' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
-                                            {whatsappStatus}
-                                        </span>
+                        {activeTab === 'general' ? (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h3>Conexão WhatsApp</h3>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <div className={`status-indicator status-${whatsappStatus === 'connected' ? 'active' : 'inactive'}`}></div>
+                                            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase' }}>{whatsappStatus}</span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-center py-4">
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 0', textAlign: 'center' }}>
                                         {whatsappStatus === 'connected' ? (
-                                            <div className="text-center space-y-4">
-                                                <div className="w-20 h-20 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto">
-                                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                                                </div>
-                                                <p className="text-sm text-gray-400 font-bold">Instância conectada e operacional</p>
-                                                <button className="text-red-500 text-xs font-black uppercase tracking-widest hover:underline" onClick={() => fetch('/api/zap/whatsapp/disconnect', { method: 'POST' }).then(checkWhatsApp)}>Desconectar</button>
+                                            <div style={{ color: 'var(--trend-up)' }}>
+                                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginBottom: '16px' }}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                                                <p style={{ color: 'var(--text-primary)', fontWeight: 700 }}>WhatsApp Conectado</p>
+                                                <button
+                                                    onClick={() => handleWhatsAppAction('disconnect')}
+                                                    style={{ marginTop: '24px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--trend-down)', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}
+                                                >
+                                                    Desconectar Instância
+                                                </button>
                                             </div>
                                         ) : qrCode ? (
-                                            <div className="text-center space-y-4">
-                                                <div className="bg-white p-4 rounded-2xl inline-block shadow-2xl">
-                                                    <img src={`/api/zap/whatsapp/qr?t=${Date.now()}`} className="w-48 h-48" alt="QR Code" />
+                                            <div>
+                                                <div style={{ background: '#fff', padding: '16px', borderRadius: '16px', display: 'inline-block', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+                                                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrCode)}`} alt="QR Code" style={{ width: '200px', height: '200px' }} />
                                                 </div>
-                                                <p className="text-xs text-gray-500 font-bold">Escaneie com seu WhatsApp para conectar</p>
+                                                <p style={{ marginTop: '24px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>Escaneie o código acima com seu WhatsApp</p>
                                             </div>
                                         ) : (
-                                            <button className="bg-white/5 text-white px-10 py-4 rounded-xl font-bold text-sm hover:bg-white/10 transition-all" onClick={connectWhatsApp} disabled={connecting}>
-                                                {connecting ? 'Gerando QR Code...' : 'Iniciar Nova Conexão'}
+                                            <button
+                                                className="btn-primary"
+                                                onClick={() => handleWhatsAppAction('init')}
+                                                disabled={connecting}
+                                            >
+                                                {connecting ? 'Iniciando...' : 'Conectar Novo WhatsApp'}
                                             </button>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* AI Intelligence */}
-                                <div className="card space-y-6">
-                                    <h3 className="font-bold text-white uppercase text-xs tracking-widest">Inteligência Artificial</h3>
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-500 uppercase">Provedor</label>
-                                            <select className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" value={settings.ai_backend || 'openai'} onChange={e => updateSetting('ai_backend', e.target.value)}>
-                                                <option value="openai">OpenAI (GPT-4o)</option>
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h3>Inteligência Artificial</h3>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '10px 0' }}>
+                                        <div className="form-group">
+                                            <label>Backend de IA</label>
+                                            <select
+                                                className="form-input"
+                                                value={settings.ai_backend || 'openai'}
+                                                onChange={(e) => {
+                                                    updateSetting('ai_backend', e.target.value);
+                                                    saveOneSetting('ai_backend', e.target.value);
+                                                }}
+                                            >
+                                                <option value="openai">OpenAI (Nuvem)</option>
                                                 <option value="localai">Rocha Deep (Local)</option>
                                             </select>
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-gray-500 uppercase">Chave API OpenAI</label>
-                                            <input type="password" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" placeholder="sk-..." value={settings.openai_api_key || ''} onChange={e => updateSetting('openai_api_key', e.target.value)} />
+                                        <div className="form-group">
+                                            <label>Chave API OpenAI</label>
+                                            <input
+                                                type="password"
+                                                className="form-input"
+                                                placeholder="sk-..."
+                                                value={settings.openai_api_key || ''}
+                                                onBlur={(e) => saveOneSetting('openai_api_key', e.target.value)}
+                                                onChange={(e) => updateSetting('openai_api_key', e.target.value)}
+                                            />
                                         </div>
-                                        <div className="flex items-center gap-4 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
-                                            <label className="relative inline-flex items-center cursor-pointer">
-                                                <input type="checkbox" className="sr-only peer" checked={settings.audio_responses === 'enabled'} onChange={e => updateSetting('audio_responses', e.target.checked ? 'enabled' : 'disabled')} />
-                                                <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#c9a05b] after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                                            </label>
-                                            <div>
-                                                <span className="text-white text-xs font-bold block">Respostas por Áudio</span>
-                                                <span className="text-[10px] text-gray-500">O robô enviará áudios curtos personalizados</span>
-                                            </div>
+                                        <div className="form-group">
+                                            <label>Nome do Sistema (White Label)</label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+                                                value={settings.system_name || 'ROCHA ZAP'}
+                                                onBlur={(e) => saveOneSetting('system_name', e.target.value)}
+                                                onChange={(e) => updateSetting('system_name', e.target.value)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <MenuBuilder />
+                            <div className="card">
+                                <MenuBuilder />
+                            </div>
                         )}
                     </div>
-                </main>
-            </div>
-
-            {/* Toast port */}
-            {toast && (
-                <div className={`fixed bottom-8 right-8 px-8 py-4 rounded-2xl shadow-2xl z-[500] font-bold text-sm animate-slide-up ${toast.type === 'success' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}>
-                    {toast.message}
                 </div>
-            )}
+            </main>
+
+            <style jsx>{`
+                .tab-btn {
+                    background: transparent;
+                    border: none;
+                    color: var(--text-muted);
+                    padding: 12px 24px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    border-bottom: 2px solid transparent;
+                    transition: all 0.2s;
+                }
+                .tab-btn.active {
+                    color: var(--gold-primary);
+                    border-bottom-color: var(--gold-primary);
+                }
+                .status-indicator {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                }
+                .status-active { background: var(--trend-up); box-shadow: 0 0 10px var(--trend-up); }
+                .status-inactive { background: var(--trend-down); }
+            `}</style>
         </div>
     );
 }

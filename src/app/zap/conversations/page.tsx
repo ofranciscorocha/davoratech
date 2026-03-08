@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Sidebar from '@/components/zap/Sidebar';
+import MainHeader from '@/components/zap/MainHeader';
 
 /* ConversationsPage restored from original project */
 export default function ConversationsPage() {
@@ -35,7 +36,7 @@ export default function ConversationsPage() {
 
     const fetchConversations = async () => {
         try {
-            const res = await fetch(`/api/conversations?status=${filter}`);
+            const res = await fetch(`/api/zap/conversations?status=${filter}`);
             const data = await res.json();
             setConversations(data);
         } catch (e) {
@@ -45,7 +46,7 @@ export default function ConversationsPage() {
 
     const fetchMessages = async (convId) => {
         try {
-            const res = await fetch(`/api/messages?conversationId=${convId}`);
+            const res = await fetch(`/api/zap/messages?conversationId=${convId}`);
             const data = await res.json();
             if (Array.isArray(data)) {
                 setMessages(data);
@@ -89,7 +90,7 @@ export default function ConversationsPage() {
 
     const handleTakeover = async (resume = false) => {
         if (!selected) return;
-        await fetch('/api/conversations', {
+        await fetch('/api/zap/conversations', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -103,7 +104,7 @@ export default function ConversationsPage() {
 
     const changeAgent = async (agentType) => {
         if (!selected) return;
-        await fetch('/api/conversations', {
+        await fetch('/api/zap/conversations', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -118,7 +119,7 @@ export default function ConversationsPage() {
     const closeConversation = async () => {
         if (!selected) return;
         if (!confirm('Encerrar esta conversa?')) return;
-        await fetch('/api/conversations', {
+        await fetch('/api/zap/conversations', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -167,8 +168,9 @@ export default function ConversationsPage() {
     return (
         <div className="app-layout">
             <Sidebar />
-            <main className="main-content" style={{ overflow: 'hidden' }}>
-                <div className="conversations-layout">
+            <main className="main-content" style={{ display: 'flex', flexDirection: 'column' }}>
+                <MainHeader />
+                <div className="conversations-layout" style={{ flex: 1, margin: '24px 40px', height: 'calc(100vh - 144px)' }}>
                     <div className="conversation-list">
                         <div className="conversation-search">
                             <input
