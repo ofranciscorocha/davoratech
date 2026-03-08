@@ -1,254 +1,118 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/zap/Sidebar';
-import { X } from 'lucide-react';
+import MainHeader from '@/components/zap/MainHeader';
+import '../zap.css';
 
 export default function KnowledgePage() {
-    const [articles, setArticles] = useState<any[]>([]);
-    const [categories, setCategories] = useState<any[]>([{ value: 'all', label: 'Todos', icon: '', color: '' }]);
+    const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false);
-    const [showUploadModal, setShowUploadModal] = useState(false);
-    const [showCategorySettings, setShowCategorySettings] = useState(false);
 
-    const [editItem, setEditItem] = useState<any>(null);
-    const [form, setForm] = useState({ title: '', content: '', category: 'general' });
-    const [filter, setFilter] = useState('all');
+    useEffect(() => { fetchKnowledge(); }, []);
 
-    const [uploadFile, setUploadFile] = useState<File | null>(null);
-    const [uploadCategory, setUploadCategory] = useState('general');
-    const [uploading, setUploading] = useState(false);
-
-    const [catList, setCatList] = useState<any[]>([]);
-    const [newCat, setNewCat] = useState({ value: '', label: '', icon: '', color: '#c9a05b' });
-    const [savingCategories, setSavingCategories] = useState(false);
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        fetchCategories();
-    }, []);
-
-    useEffect(() => {
-        if (categories.length > 1) fetchArticles();
-    }, [filter, categories]);
-
-    const fetchCategories = async () => {
+    const fetchKnowledge = async () => {
         try {
-            const res = await fetch('/api/zap/knowledge/categories');
+            const res = await fetch('/api/zap/knowledge');
             const data = await res.json();
-            setCategories(data);
-            setCatList(data.filter((c: any) => c.value !== 'all'));
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
-    const fetchArticles = async () => {
-        try {
-            const url = filter === 'all' ? '/api/zap/knowledge' : `/api/zap/knowledge?category=${filter}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            setArticles(data);
+            setCategories(data.categories || []);
         } catch (e) { }
         setLoading(false);
-    };
-
-    const handleSave = async () => {
-        if (!form.title.trim() || !form.content.trim()) return;
-
-        if (editItem) {
-            await fetch('/api/zap/knowledge', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: editItem.id, ...form }),
-            });
-        } else {
-            await fetch('/api/zap/knowledge', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
-        }
-
-        setShowModal(false);
-        setEditItem(null);
-        setForm({ title: '', content: '', category: 'general' });
-        fetchArticles();
-    };
-
-    const handleDelete = async (id: number) => {
-        if (!confirm('Tem certeza que deseja excluir este artigo?')) return;
-        await fetch(`/api/zap/knowledge?id=${id}`, { method: 'DELETE' });
-        fetchArticles();
-    };
-
-    const handleEdit = (article: any) => {
-        setEditItem(article);
-        setForm({ title: article.title, content: article.content, category: article.category });
-        setShowModal(true);
-    };
-
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setUploadFile(file);
-        setUploadCategory(filter === 'all' ? 'general' : filter);
-        setShowUploadModal(true);
-    };
-
-    const confirmUpload = async () => {
-        if (!uploadFile) return;
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('file', uploadFile);
-        formData.append('category', uploadCategory);
-
-        try {
-            const res = await fetch('/api/zap/knowledge/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await res.json();
-            if (data.success) {
-                fetchArticles();
-                setShowUploadModal(false);
-                setUploadFile(null);
-            } else {
-                alert('Erro: ' + (data.error || 'Falha ao processar arquivo'));
-            }
-        } catch (err) {
-            alert('Erro ao enviar arquivo');
-        }
-        setUploading(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-    };
-
-    const saveCategories = async () => {
-        setSavingCategories(true);
-        try {
-            const updated = [{ value: 'all', label: 'Todos', icon: '', color: '' }, ...catList];
-            await fetch('/api/zap/knowledge/categories', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ categories: updated }),
-            });
-            await fetchCategories();
-            setShowCategorySettings(false);
-        } catch (e) {
-            alert('Erro ao salvar categorias');
-        }
-        setSavingCategories(false);
-    };
-
-    const addCategory = () => {
-        if (!newCat.label || !newCat.value) return;
-        setCatList([...catList, { ...newCat, value: newCat.label.toLowerCase().replace(/[^a-z0-9]/g, '') }]);
-        setNewCat({ value: '', label: '', icon: '', color: '#c9a05b' });
-    };
-
-    const removeCategory = (val: string) => {
-        if (val === 'general') return alert('A categoria Geral não pode ser excluída.');
-        setCatList(catList.filter(c => c.value !== val));
-    };
-
-    const getCategoryColor = (val: string) => {
-        const cat = categories.find(c => c.value === val);
-        return cat?.color || '#c9a05b';
     };
 
     return (
         <div className="app-layout">
             <Sidebar />
             <main className="main-content">
-                <div className="page-header">
-                    <div>
-                        <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
-                            Base de Conhecimento
-                        </h1>
-                        <p className="subtitle">Alimente o bot com informações sobre sua empresa, produtos e serviços</p>
-                    </div>
-                    <div className="flex gap-3">
-                        <button className="bg-white/5 border border-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10" onClick={() => setShowCategorySettings(true)}>Categorias</button>
-                        <input type="file" ref={fileInputRef} className="hidden" accept=".pdf,.txt,.docx,.xlsx" onChange={handleFileSelect} />
-                        <button className="bg-white/5 border border-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10" onClick={() => fileInputRef.current?.click()} disabled={uploading}>{uploading ? 'Processando...' : 'Importar Doc'}</button>
-                        <button className="bg-[#c9a05b] text-white px-6 py-2.5 rounded-xl font-bold text-xs hover:scale-105 transition-all" onClick={() => { setEditItem(null); setForm({ title: '', content: '', category: 'general' }); setShowModal(true); }}>Novo Artigo</button>
-                    </div>
-                </div>
-
-                <div className="page-body">
-                    <div className="flex gap-3 mb-8 overflow-x-auto pb-4">
-                        {categories.map(cat => (
-                            <button key={cat.value} className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${filter === cat.value ? 'bg-[#c9a05b] text-white' : 'bg-white/5 text-gray-400 hover:text-white'}`} onClick={() => setFilter(cat.value)}>
-                                {cat.label}
-                            </button>
-                        ))}
-                    </div>
-
-                    {loading ? (
-                        <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-[#c9a05b]/20 border-t-[#c9a05b] rounded-full animate-spin"></div></div>
-                    ) : articles.length === 0 ? (
-                        <div className="card p-20 text-center flex flex-col items-center">
-                            <div className="w-16 h-16 bg-[#c9a05b]/10 text-[#c9a05b] rounded-full flex items-center justify-center mb-6"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg></div>
-                            <h3 className="text-xl font-bold text-white mb-2">Base de Conhecimento Vazia</h3>
-                            <p className="text-gray-400 max-w-sm">Adicione artigos ou importe documentos para que o bot possa responder dúvidas com precisão.</p>
+                <MainHeader />
+                <div className="dashboard-viewport">
+                    <div className="page-header-premium">
+                        <div className="header-info">
+                            <div className="title-row">
+                                <div className="icon-box-premium">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
+                                </div>
+                                <h1>Base de Conhecimento</h1>
+                            </div>
+                            <p className="subtitle">Ensine a IA sobre seu negócio, produtos e serviços.</p>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {articles.map(a => (
-                                <div key={a.id} className="card group hover:border-[#c9a05b]/30 transition-all cursor-pointer" onClick={() => handleEdit(a)}>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <span style={{ color: getCategoryColor(a.category) }} className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-white/5">
-                                            {categories.find(c => c.value === a.category)?.label || a.category}
-                                        </span>
-                                        {a.source_file && <span className="text-[9px] text-gray-500 font-bold bg-white/5 px-2 py-1 rounded">DOC: {a.source_file}</span>}
+                        <button className="btn-create-premium">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                            Adicionar Documento
+                        </button>
+                    </div>
+
+                    <div className="knowledge-grid-premium">
+                        {loading ? (
+                            <div className="loading-state-premium"><div className="spinner-premium"></div></div>
+                        ) : categories.length === 0 ? (
+                            <div className="empty-card-premium">
+                                <div className="empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2zM6 13h4m-4-4h12m-12 8h12" /></svg></div>
+                                <h3>Sem documentos ainda</h3>
+                                <p>Sua IA precisa de contexto para responder bem. Comece adicionando informações.</p>
+                            </div>
+                        ) : (
+                            categories.map(cat => (
+                                <div key={cat.id} className="knowledge-card-premium">
+                                    <div className="cat-header">
+                                        <div className="cat-icon-box">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                                        </div>
+                                        <div className="cat-badge">Sincronizado</div>
                                     </div>
-                                    <h4 className="text-lg font-bold text-white mb-2 group-hover:text-[#c9a05b] transition-colors">{a.title}</h4>
-                                    <p className="text-xs text-gray-400 line-clamp-4 leading-relaxed">{a.content}</p>
-                                    <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center">
-                                        <span className="text-[10px] text-gray-500 font-bold uppercase">{a.is_active ? 'Ativo' : 'Pendente'}</span>
-                                        <button className="text-gray-600 hover:text-red-500 transition-colors" onClick={(e) => { e.stopPropagation(); handleDelete(a.id); }}><X size={16} /></button>
+                                    <div className="cat-body">
+                                        <h4>{cat.name}</h4>
+                                        <p>{cat.description || 'Contém as regras de negócio e informações estruturadas para a IA.'}</p>
+                                        <div className="doc-count-premium">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                                            8 Arquivos
+                                        </div>
+                                    </div>
+                                    <div className="cat-footer">
+                                        <button className="btn-text-premium">Ver Documentos →</button>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </main>
-
-            {showModal && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
-                    <div className="relative bg-[#0d1e45] w-full max-w-2xl rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
-                        <div className="p-8 border-b border-white/10 bg-[#0a1b3f] flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-white">{editItem ? 'Editar Artigo' : 'Novo Artigo'}</h3>
-                            <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-white"><X /></button>
-                        </div>
-                        <div className="p-8 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Título</label>
-                                <input type="text" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none focus:border-[#c9a05b]" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Categoria</label>
-                                <select className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none focus:border-[#c9a05b]" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-                                    {categories.filter(c => c.value !== 'all').map(cat => <option key={cat.value} value={cat.value}>{cat.label}</option>)}
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Conteúdo</label>
-                                <textarea className="w-full h-48 bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none focus:border-[#c9a05b]" value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} />
-                            </div>
-                        </div>
-                        <div className="p-8 bg-[#0a1b3f] flex justify-end gap-4">
-                            <button onClick={() => setShowModal(false)} className="px-6 py-2 text-xs font-bold text-gray-400">Cancelar</button>
-                            <button onClick={handleSave} className="bg-[#c9a05b] text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg">Salvar Artigo</button>
-                        </div>
+                            ))
+                        )}
                     </div>
                 </div>
-            )}
+
+                <style jsx>{`
+                    .knowledge-grid-premium { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+                    .knowledge-card-premium {
+                        background: var(--bg-card);
+                        border: 1px solid var(--glass-border);
+                        border-radius: 28px;
+                        padding: 30px;
+                        transition: var(--transition);
+                        backdrop-filter: blur(10px);
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .knowledge-card-premium:hover { border-color: var(--gold-primary); transform: translateY(-5px); background: var(--bg-card-hover); }
+                    
+                    .cat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+                    .cat-icon-box {
+                        width: 48px;
+                        height: 48px;
+                        background: var(--bg-tertiary);
+                        border: 1px solid var(--border-color);
+                        border-radius: 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--gold-primary);
+                    }
+                    .cat-badge { font-size: 0.65rem; font-weight: 800; color: #10b981; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+
+                    .cat-body h4 { font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0 0 8px; }
+                    .cat-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+                    .doc-count-premium { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); }
+
+                    .cat-footer { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+                    .btn-text-premium { background: transparent; border: none; font-size: 0.85rem; font-weight: 800; color: var(--gold-primary); cursor: pointer; transition: var(--transition); padding: 0; }
+                    .btn-text-premium:hover { opacity: 0.8; transform: translateX(5px); }
+                `}</style>
+            </main>
         </div>
     );
 }
-
