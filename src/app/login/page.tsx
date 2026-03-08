@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { Lock, Mail, ArrowRight, Loader2, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLogo } from '@/context/LogoContext';
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
                             transition={{ duration: 0.5, type: 'spring' }}
                             className="w-12 h-12 mb-4 bg-gold rounded-full flex items-center justify-center shadow-lg shadow-gold/20"
                         >
-                             <Lock className="w-6 h-6 text-slate-950" />
+                            <Lock className="w-6 h-6 text-slate-950" />
                         </motion.div>
                         <h1 className="text-2xl font-bold text-white tracking-tight">Rocha Tec</h1>
                         <p className="text-slate-400 text-sm mt-1">Acesse sua central de ferramentas</p>
