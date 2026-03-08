@@ -1,0 +1,77 @@
+/* Pátio Rocha Leilões Design System */
+
+:root {
+    --leilao-gold: #c9a05b;
+    --leilao-gold-dark: #b88a44;
+    --leilao-brand: #0a1b3f;
+    --leilao-brand-light: #162a5c;
+    --leilao-accent: #D4AF37;
+}
+
+#leiloes-root {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
+}
+
+#leiloes-root .glass-nav {
+    background: rgba(10, 27, 63, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leilao-hero-overlay {
+    background: linear-gradient(135deg, rgba(10, 27, 63, 0.95) 0%, rgba(10, 27, 63, 0.8) 50%, rgba(201, 160, 91, 0.2) 100%);
+}
+
+.gold-gradient-text {
+    background: linear-gradient(135deg, #c9a05b, #D4AF37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.leilao-card {
+    background: white;
+    border-radius: 1.5rem;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.leilao-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
+}
+
+/* Common button styles */
+.leilao-btn-primary {
+    background: #0a1b3f;
+    color: white;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.leilao-btn-primary:hover {
+    background: #c9a05b;
+    transform: translateY(-2px);
+}
+
+.leilao-btn-gold {
+    background: #c9a05b;
+    color: white;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.leilao-btn-gold:hover {
+    background: #0a1b3f;
+    transform: translateY(-2px);
+}

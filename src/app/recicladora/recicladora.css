@@ -1,34 +1,64 @@
-/* RECICLADORA ROCHA SCOPED CSS */
-#recicladora-root {
-    --brand-green: #1a4731;
-    --brand-green-dark: #0f2e1f;
-    --brand-lime: #76b139;
-    --brand-lime-light: #8ec448;
-    --background: #f5f8f6;
-    --text-dark: #1a202c;
+/* Recicladora Rocha Design System */
+
+:root {
+    --brand-green: 144 60% 22%;
+    --brand-green-dark: 150 20% 6%;
+    --brand-lime: 80 70% 45%;
+    --brand-lime-light: 80 70% 55%;
+}
+
+@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-up {
+    animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 #recicladora-root {
-    background-color: var(--background);
-    color: var(--text-dark);
-    min-height: 100vh;
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-#recicladora-root .hero-overlay {
-    background: linear-gradient(135deg, rgba(26, 71, 49, 0.92) 0%, rgba(26, 71, 49, 0.85) 50%, rgba(118, 177, 57, 0.8) 100%);
+#recicladora-root h1,
+#recicladora-root h2,
+#recicladora-root h3 {
+    letter-spacing: -0.02em;
 }
 
-#recicladora-root .btn-primary {
-    background-color: var(--brand-green);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+.hero-overlay {
+    background: linear-gradient(135deg, hsla(144, 60%, 12%, 0.95) 0%, hsla(144, 50%, 18%, 0.85) 50%, hsla(80, 40%, 25%, 0.7) 100%);
 }
 
-#recicladora-root .btn-primary:hover {
-    background-color: var(--brand-green-dark);
-    transform: translateY(-2px);
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Add remaining Recicladora styles here, scoped to #recicladora-root */
+.text-accent-gradient {
+    background: linear-gradient(135deg, #8ec448, #76b139);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Container responsive sync */
+.container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}

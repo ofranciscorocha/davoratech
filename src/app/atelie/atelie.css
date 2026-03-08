@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+#atelie-root {
+    --color-primary: #1B261D;
+    --color-secondary: #EFE5D5;
+    --color-accent: #D4C3A3;
+    --color-cream: #F9F6F1;
+    --color-ink: #1B261D;
+    --color-ink-light: #4A5D4A;
+
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    min-height: 100vh;
+}
+
+#atelie-root .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+#atelie-root .font-sans {
+    font-family: 'Lora', sans-serif;
+}
+
+#atelie-root ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+}
+
+#atelie-root .bg-cream {
+    background-color: var(--color-cream);
+}
+
+#atelie-root .bg-primary {
+    background-color: var(--color-primary);
+}
+
+#atelie-root .bg-secondary {
+    background-color: var(--color-secondary);
+}
+
+#atelie-root .bg-accent {
+    background-color: var(--color-accent);
+}
+
+#atelie-root .text-primary {
+    color: var(--color-primary);
+}
+
+#atelie-root .text-secondary {
+    color: var(--color-secondary);
+}
+
+#atelie-root .text-accent {
+    color: var(--color-accent);
+}
+
+#atelie-root .text-ink-light {
+    color: var(--color-ink-light);
+}
+
+#atelie-root .border-primary {
+    border-color: var(--color-primary);
+}
+
+#atelie-root .border-secondary {
+    border-color: var(--color-secondary);
+}
+
+#atelie-root .border-accent {
+    border-color: var(--color-accent);
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+#atelie-root .animate-bounce {
+    animation: bounce 2s infinite;
+}

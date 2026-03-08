@@ -4,10 +4,10 @@ import Sidebar from '@/components/zap/Sidebar';
 
 /* ContactsPage restored from original project */
 export default function ContactsPage() {
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState<any[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
-    const [selectedContacts, setSelectedContacts] = useState([]);
+    const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
 
     useEffect(() => { fetchContacts(); }, [search]);
 

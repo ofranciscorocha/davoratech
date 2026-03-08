@@ -1,9 +1,24 @@
-/* ROCHA ZAP SCOPED CSS */
+/* ROCHA ZAP ROBUST SCOPED CSS
+   Ported from original globals.css
+   Wrapped in #rocha-zap-root to prevent leakage
+*/
+
 #rocha-zap-root {
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  /* RESET for the scoped root to ignore master globals */
+  display: block;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #ffffff;
+  box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  min-height: 100vh;
+  background: #0a1b3f;
+  /* --bg-primary fallback */
+}
+
+#rocha-zap-root * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 #rocha-zap-root {
@@ -16,10 +31,6 @@
   --glass-border: rgba(255, 255, 255, 0.05);
   --bg-input: #142857;
   --bg-sidebar: #07132e;
-  --bg-success: rgba(34, 197, 94, 0.1);
-  --bg-warning: rgba(201, 160, 91, 0.1);
-  --bg-danger: rgba(239, 68, 68, 0.1);
-  --bg-info: rgba(59, 130, 246, 0.1);
   --text-primary: #ffffff;
   --text-secondary: #a1b0d0;
   --text-muted: #6b7ea6;
@@ -46,12 +57,9 @@
   --transition: all 0.25s ease;
 }
 
-#rocha-zap-root .card {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
-  transition: var(--transition);
+#rocha-zap-root .app-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
 #rocha-zap-root .sidebar {
@@ -65,13 +73,222 @@
   left: 0;
   bottom: 0;
   z-index: 100;
+  transition: var(--transition);
+}
+
+#rocha-zap-root .sidebar-logo {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#rocha-zap-root .sidebar-logo h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #c9a05b;
+}
+
+#rocha-zap-root .sidebar-profile {
+  padding: 16px 20px;
+  margin: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#rocha-zap-root .profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-primary), var(--bg-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  border: 1px solid var(--border-color);
+}
+
+#rocha-zap-root .profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#rocha-zap-root .profile-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#rocha-zap-root .profile-role {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+#rocha-zap-root .sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+#rocha-zap-root .nav-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 16px 12px 8px;
+}
+
+#rocha-zap-root .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 2px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#rocha-zap-root .nav-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+#rocha-zap-root .nav-item.active {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.15), rgba(37, 211, 102, 0.05));
+  color: var(--green-primary);
+  font-weight: 600;
+}
+
+#rocha-zap-root .nav-item .icon {
+  font-size: 1.2rem;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#rocha-zap-root .sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+#rocha-zap-root .sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+#rocha-zap-root .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red-primary);
+}
+
+#rocha-zap-root .status-dot.connected {
+  background: var(--green-primary);
+  box-shadow: 0 0 10px var(--green-primary);
 }
 
 #rocha-zap-root .main-content {
   flex: 1;
   margin-left: 260px;
+  padding: 24px 32px;
   min-height: 100vh;
+  color: var(--text-primary);
 }
 
-/* Add remaining essential original styles here, prefixed with #rocha-zap-root */
-/* ... (Truncated for brevity, but I will include all relevant classes from globals.css) */
+#rocha-zap-root h1,
+#rocha-zap-root h2,
+#rocha-zap-root h3,
+#rocha-zap-root h4 {
+  color: var(--text-primary);
+}
+
+#rocha-zap-root .card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}
+
+/* TABLE STYLES PORTED */
+#rocha-zap-root table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#rocha-zap-root th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#rocha-zap-root td {
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+#rocha-zap-root .label-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* RESPONSIVE PORTED */
+@media (max-width: 1024px) {
+  #rocha-zap-root .sidebar {
+    width: 70px;
+  }
+
+  #rocha-zap-root .sidebar .nav-item span:not(.icon),
+  #rocha-zap-root .sidebar .nav-section-title,
+  #rocha-zap-root .sidebar-logo h2,
+  #rocha-zap-root .sidebar-footer,
+  #rocha-zap-root .sidebar-profile .profile-info {
+    display: none;
+  }
+
+  #rocha-zap-root .main-content {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  #rocha-zap-root .sidebar {
+    display: none;
+  }
+
+  #rocha-zap-root .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+}

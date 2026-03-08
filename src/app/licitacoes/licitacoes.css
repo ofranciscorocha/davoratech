@@ -1,10 +1,111 @@
-/* LICITAÇÕES SCOPED CSS */
+/* ROCHA LICITAÇÕES SCOPED CSS */
 #licitacoes-root {
-    --licitacoes-primary: #15803d;
-    --licitacoes-bg: #f0fdf4;
+    --background: #020202;
+    --foreground: #ffffff;
+    --accent: #3b82f6;
+    --ring: #3b82f6;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+    overflow: hidden;
 }
 
-#licitacoes-root {
-    background-color: var(--licitacoes-bg);
-    min-height: 100vh;
+#licitacoes-root *,
+#licitacoes-root *::before,
+#licitacoes-root *::after {
+    box-sizing: border-box;
+}
+
+#licitacoes-root .glass {
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#licitacoes-root .glass-card {
+    background: rgba(10, 10, 10, 0.6);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+#licitacoes-root .bg-accent {
+    background-color: var(--accent);
+}
+
+#licitacoes-root .text-accent {
+    color: var(--accent);
+}
+
+#licitacoes-root .rochinha-watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 8rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.015);
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+    user-select: none;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#licitacoes-root .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
+
+#licitacoes-root table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#licitacoes-root th {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    font-size: 10px;
+    color: #52525b;
+    padding: 1.25rem 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: left;
+}
+
+#licitacoes-root td {
+    padding: 2rem 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+#licitacoes-root tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+#licitacoes-root .glass-button {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+#licitacoes-root .glass-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
 }

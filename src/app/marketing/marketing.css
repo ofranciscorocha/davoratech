@@ -4,36 +4,78 @@
     --marketing-dark: #0a192f;
     --marketing-dark-light: #112240;
     --marketing-teal: #009688;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f8fafc;
 }
 
-#marketing-root {
-    background-color: #f9fafb;
-    color: #1a202c;
-    min-height: 100vh;
+#marketing-root *,
+#marketing-root *::before,
+#marketing-root *::after {
+    box-sizing: border-box;
 }
 
-#marketing-root .bg-marketing-dark {
-    background-color: var(--marketing-dark);
-}
-
-#marketing-root .text-marketing-gold {
-    color: var(--marketing-primary);
-}
-
-/* Scoped Utility Classes from Original tailwind usage */
+/* Sidebar Styling */
 #marketing-root .sidebar-marketing {
     background: linear-gradient(to bottom, #0a192f, #112240);
 }
 
 #marketing-root .nav-item-active {
     background-color: var(--marketing-primary);
-    color: var(--marketing-dark);
+    color: var(--marketing-dark) !important;
 }
 
-#marketing-root .card-stat {
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+#marketing-root .nav-item-active svg {
+    stroke-width: 3px;
+}
+
+/* Table Styling */
+#marketing-root table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#marketing-root th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.75rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+#marketing-root td {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+#marketing-root tr:hover td {
+    background-color: #f1f5f9;
+}
+
+/* Scrollbar */
+#marketing-root ::-webkit-scrollbar {
+    width: 8px;
+}
+
+#marketing-root ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#marketing-root ::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 4px;
+}
+
+#marketing-root ::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
 }
 
 /* Animations ported from index.css */

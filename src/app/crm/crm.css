@@ -1,19 +1,142 @@
-/* CRM SCOPED CSS */
+/* ROCHA CRM PREMIUM SCOPED CSS */
 #crm-root {
-    --crm-primary: #3b82f6;
-    --crm-bg: #f3f4f6;
+    --premium-gold: #c5a059;
+    --premium-gold-light: #ecd08d;
+    --premium-dark: #020617;
+    --premium-card: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    background-color: var(--premium-dark);
+    color: #fff;
+    overflow: hidden;
 }
 
-#crm-root {
-    background-color: var(--crm-bg);
-    color: #1f2937;
-    min-height: 100vh;
+#crm-root *,
+#crm-root *::before,
+#crm-root *::after {
+    box-sizing: border-box;
 }
 
-/* Ported styles from App.css and index.css */
-#crm-root .crm-card {
-    background: white;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+#crm-root .gold-text {
+    background: linear-gradient(135deg, #c5a059 0%, #ecd08d 50%, #c5a059 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+#crm-root .gold-gradient-bg {
+    background: linear-gradient(135deg, #c5a059 0%, #ecd08d 50%, #c5a059 100%);
+}
+
+#crm-root .glass-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+#crm-root .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animations */
+@keyframes mesh {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#crm-root .animate-mesh {
+    background: linear-gradient(-45deg, #020617, #0f172a, #131424, #020617);
+    background-size: 400% 400%;
+    animation: mesh 15s ease infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+#crm-root .animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-100%, 0);
+    }
+}
+
+#crm-root .animate-marquee-scroll {
+    animation: marquee-scroll 30s linear infinite;
+}
+
+/* Custom Scrollbar */
+#crm-root ::-webkit-scrollbar {
+    width: 8px;
+}
+
+#crm-root ::-webkit-scrollbar-track {
+    background: var(--premium-dark);
+}
+
+#crm-root ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+#crm-root ::-webkit-scrollbar-thumb:hover {
+    background: var(--premium-gold);
+}
+
+/* Table Styling for CRM */
+#crm-root table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#crm-root th {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--premium-gold);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#crm-root td {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+#crm-root tr:hover td {
+    background-color: rgba(255, 255, 255, 0.04);
 }

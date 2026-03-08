@@ -1,6 +1,7 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const ICONS = {
     dashboard: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9" /><rect x="14" y="3" width="7" height="5" /><rect x="14" y="11" width="7" height="10" /><rect x="3" y="15" width="7" height="6" /></svg>,
@@ -45,24 +46,24 @@ export default function Sidebar({ stats }: { stats?: any }) {
             }
         };
 
-        const fetchWhiteLabel = async () => {
+        const fetchSettings = async () => {
             try {
                 const res = await fetch('/api/zap/settings');
-                const data = await res.json();
-                const nameSetting = data.settings?.find((s: any) => s.key === 'system_name');
-                if (nameSetting?.value) setBotName(nameSetting.value);
-            } catch (e) {
-                console.error('Error fetching white label settings:', e);
-            }
+                if (res.ok) {
+                    const data = await res.json();
+                    const nameSetting = data.settings?.find((s: any) => s.key === 'system_name');
+                    if (nameSetting?.value) setBotName(nameSetting.value);
+                }
+            } catch (e) { }
         };
 
         checkStatus();
-        fetchWhiteLabel();
-        const interval = setInterval(checkStatus, 10000);
+        fetchSettings();
+        const interval = setInterval(checkStatus, 15000);
         return () => clearInterval(interval);
     }, []);
 
-    const statusLabel: any = {
+    const statusLabel: Record<string, string> = {
         connected: 'Operacional',
         disconnected: 'Inativo',
         qr_ready: 'Aguardando QR',
@@ -78,7 +79,7 @@ export default function Sidebar({ stats }: { stats?: any }) {
     return (
         <aside className="sidebar">
             <div className="sidebar-logo">
-                <div className="logo-icon" style={{ color: 'var(--gold-primary)' }}>
+                <div className="logo-svg" style={{ color: 'var(--gold-primary)' }}>
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
                 </div>
                 <h2>{botName}</h2>
@@ -95,14 +96,15 @@ export default function Sidebar({ stats }: { stats?: any }) {
             <nav className="sidebar-nav">
                 <div className="nav-section-title">Navegação Estratégica</div>
                 {NAV_ITEMS.map(item => (
-                    <div
+                    <Link
                         key={item.path}
+                        href={item.path}
                         className={`nav-item ${pathname === item.path ? 'active' : ''} ${item.disabled ? 'disabled' : ''}`}
-                        onClick={() => !item.disabled && router.push(item.path)}
+                        style={item.disabled ? { opacity: 0.5, cursor: 'not-allowed', pointerEvents: 'none' } : {}}
                     >
                         <span className="icon">{item.icon}</span>
                         <span>{item.label}</span>
-                    </div>
+                    </Link>
                 ))}
             </nav>
 
