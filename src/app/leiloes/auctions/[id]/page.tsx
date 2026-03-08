@@ -2,7 +2,7 @@
 import Navbar from '@/components/leiloes/Navbar';
 import Footer from '@/components/leiloes/Footer';
 import { LiveAuditorium } from '@/components/leiloes/live-auditorium';
-import { LotCard } from '@/components/leiloes/LotCard';
+import LotCard from '@/components/leiloes/LotCard';
 import { Calendar, Info, MapPin } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { use, useEffect, useState } from 'react';
