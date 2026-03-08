@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/zap/Sidebar';
+import MainHeader from '@/components/zap/MainHeader';
 import '../zap.css';
 
 export default function SchedulingPage() {
@@ -19,8 +20,10 @@ export default function SchedulingPage() {
         try {
             const res = await fetch('/api/zap/scheduling');
             const data = await res.json();
-            setSchedules(data);
-        } catch (e) { }
+            setSchedules(Array.isArray(data) ? data : []);
+        } catch (e) {
+            setSchedules([]);
+        }
         setLoading(false);
     };
 
@@ -55,117 +58,396 @@ export default function SchedulingPage() {
 
     const formatDate = (dateStr: string) => {
         if (!dateStr) return { day: '--', month: '---' };
-        const parts = dateStr.split('-');
-        return { day: parts[2] || '--', month: ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][parseInt(parts[1])] || '---' };
+        const d = new Date(dateStr + 'T00:00:00');
+        const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        return {
+            day: d.getDate().toString().padStart(2, '0'),
+            month: months[d.getMonth()],
+            weekDay: days[d.getDay()]
+        };
     };
 
     return (
-        <div id="rocha-zap-root">
-            <div className="app-layout">
-                <Sidebar />
-                <main className="main-content">
-                    <div className="page-header">
-                        <div>
-                            <h1 className="flex items-center gap-3">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-                                Agenda Corporativa
-                            </h1>
-                            <p className="subtitle">{schedules.length} agendamentos sincronizados</p>
+        <div className="app-layout">
+            <Sidebar />
+            <main className="main-content">
+                <MainHeader />
+
+                <div className="dashboard-viewport">
+                    <div className="page-header-premium">
+                        <div className="header-info">
+                            <div className="title-row">
+                                <div className="icon-box-premium">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                                </div>
+                                <h1>Agenda Corporativa</h1>
+                            </div>
+                            <p className="subtitle">{schedules.length} agendamentos sincronizados com IA</p>
                         </div>
-                        <button className="bg-[#c9a05b] text-white px-6 py-2.5 rounded-xl font-bold text-xs hover:scale-105 transition-all shadow-lg shadow-[#c9a05b]/20" onClick={() => setShowModal(true)}>
+                        <button className="btn-create-premium" onClick={() => setShowModal(true)}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                             Novo Agendamento
                         </button>
                     </div>
 
-                    <div className="page-body">
-                        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
-                            {[
-                                { value: 'all', label: 'Todos' },
-                                { value: 'pending', label: 'Pendentes' },
-                                { value: 'confirmed', label: 'Confirmados' },
-                                { value: 'completed', label: 'Concluídos' },
-                                { value: 'cancelled', label: 'Cancelados' },
-                            ].map(tab => (
-                                <button key={tab.value} className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${filter === tab.value ? 'bg-[#c9a05b] text-white' : 'bg-white/5 text-gray-400 hover:text-white'}`} onClick={() => setFilter(tab.value)}>
-                                    {tab.label}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="filter-container">
+                        {[
+                            { value: 'all', label: 'Todos' },
+                            { value: 'pending', label: 'Pendentes' },
+                            { value: 'confirmed', label: 'Confirmados' },
+                            { value: 'completed', label: 'Concluídos' },
+                            { value: 'cancelled', label: 'Cancelados' },
+                        ].map(tab => (
+                            <button
+                                key={tab.value}
+                                className={`filter-tab ${filter === tab.value ? 'active' : ''}`}
+                                onClick={() => setFilter(tab.value)}
+                            >
+                                {tab.label}
+                                {filter === tab.value && <div className="active-dot"></div>}
+                            </button>
+                        ))}
+                    </div>
 
-                        {loading ? (
-                            <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-[#c9a05b]/20 border-t-[#c9a05b] rounded-full animate-spin"></div></div>
-                        ) : filtered.length === 0 ? (
-                            <div className="card p-20 text-center flex flex-col items-center">
-                                <div className="w-16 h-16 bg-[#c9a05b]/10 text-[#c9a05b] rounded-full flex items-center justify-center mb-6"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></div>
-                                <h3 className="text-xl font-bold text-white mb-2">Nenhum agendamento encontrado</h3>
-                                <p className="text-gray-400 max-w-sm">Os compromissos gerados pela IA ou inseridos manualmente aparecerão nesta área.</p>
+                    {loading ? (
+                        <div className="loading-state-premium">
+                            <div className="spinner-premium"></div>
+                        </div>
+                    ) : filtered.length === 0 ? (
+                        <div className="empty-card-premium">
+                            <div className="empty-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
                             </div>
-                        ) : (
-                            <div className="space-y-4">
-                                {filtered.map(schedule => {
-                                    const d = formatDate(schedule.date);
-                                    return (
-                                        <div key={schedule.id} className="card flex items-center gap-6 group hover:border-[#c9a05b]/30">
-                                            <div className="w-16 h-16 bg-[#c9a05b]/10 rounded-2xl flex flex-col items-center justify-center border border-[#c9a05b]/20">
-                                                <span className="text-xl font-black text-[#c9a05b] leading-none">{d.day}</span>
-                                                <span className="text-[10px] font-bold text-[#c9a05b] uppercase tracking-tighter">{d.month}</span>
-                                            </div>
-                                            <div className="flex-1">
-                                                <h4 className="text-lg font-bold text-white group-hover:text-[#c9a05b] transition-colors">{schedule.title}</h4>
-                                                <div className="flex items-center gap-4 mt-1 text-xs text-gray-500 font-bold">
-                                                    <span className="flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg> {schedule.time}</span>
-                                                    {schedule.contact_name && <span className="flex items-center gap-1"><X size={12} /> {schedule.contact_name}</span>}
+                            <h3>Nenhum agendamento ativo</h3>
+                            <p>Sua agenda está limpa. Novos compromissos aparecerão aqui automaticamente.</p>
+                        </div>
+                    ) : (
+                        <div className="schedule-list-premium">
+                            {filtered.map(schedule => {
+                                const d = formatDate(schedule.date);
+                                return (
+                                    <div key={schedule.id} className="schedule-card-premium">
+                                        <div className="date-badge-premium">
+                                            <span className="weekday">{d.weekDay}</span>
+                                            <span className="day">{d.day}</span>
+                                            <span className="month">{d.month}</span>
+                                        </div>
+
+                                        <div className="schedule-info">
+                                            <div className="info-main">
+                                                <h4>{schedule.title}</h4>
+                                                <div className="info-meta">
+                                                    <span className="meta-item">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                                        {schedule.time}
+                                                    </span>
+                                                    {schedule.contact_name && (
+                                                        <span className="meta-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                                                            {schedule.contact_name}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-3">
-                                                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${schedule.status === 'confirmed' ? 'bg-emerald-500/10 text-emerald-500' :
-                                                        schedule.status === 'completed' ? 'bg-blue-500/10 text-blue-500' :
-                                                            'bg-amber-500/10 text-amber-500'
-                                                    }`}>
-                                                    {schedule.status}
+
+                                            <div className="info-actions">
+                                                <span className={`status-pill ${schedule.status}`}>
+                                                    {schedule.status === 'pending' ? 'Pendente' :
+                                                        schedule.status === 'confirmed' ? 'Confirmado' :
+                                                            schedule.status === 'completed' ? 'Concluído' : 'Cancelado'}
                                                 </span>
-                                                <div className="flex gap-2">
-                                                    {schedule.status === 'pending' && <button className="bg-emerald-500 text-white p-2 rounded-lg hover:scale-110 transition-all" onClick={() => updateStatus(schedule.id, 'confirmed')}>Check</button>}
-                                                    <button className="bg-red-500/10 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all" onClick={() => handleDelete(schedule.id)}>Del</button>
+
+                                                <div className="action-buttons">
+                                                    {schedule.status === 'pending' && (
+                                                        <button className="icon-btn check-btn" onClick={() => updateStatus(schedule.id, 'confirmed')} title="Confirmar">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
+                                                        </button>
+                                                    )}
+                                                    <button className="icon-btn del-btn" onClick={() => handleDelete(schedule.id)} title="Excluir">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                </main>
-            </div>
-
-            {/* Modal Overlay Ported Simply */}
-            {showModal && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
-                    <div className="relative bg-[#0d1e45] w-full max-w-xl rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
-                        <div className="p-8 border-b border-white/10 bg-[#0a1b3f] flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-white">Novo Agendamento</h3>
-                            <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-white">Close</button>
+                                    </div>
+                                );
+                            })}
                         </div>
-                        <div className="p-8 space-y-4">
-                            <input type="text" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" placeholder="Título do Compromisso" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-                            <div className="grid grid-cols-2 gap-4">
-                                <input type="date" className="bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
-                                <input type="time" className="bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
-                            </div>
-                            <input type="text" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" placeholder="Nome do Lead/Contato" value={form.contact_name} onChange={e => setForm({ ...form, contact_name: e.target.value })} />
-                            <textarea className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-white text-sm outline-none" placeholder="Notas Adicionais" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-                        </div>
-                        <div className="p-8 bg-[#0a1b3f] flex justify-end">
-                            <button onClick={handleSave} className="bg-[#c9a05b] text-white px-10 py-3 rounded-xl font-bold text-sm shadow-lg">Confirmar Agendamento</button>
-                        </div>
-                    </div>
+                    )}
                 </div>
-            )}
+
+                {/* MODAL PREMIUM */}
+                {showModal && (
+                    <div className="modal-overlay-premium">
+                        <div className="modal-content-premium">
+                            <div className="modal-header">
+                                <h3>Novo Agendamento</h3>
+                                <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label>Título do Compromisso</label>
+                                    <input type="text" placeholder="Ex: Reunião de Vendas" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label>Data</label>
+                                        <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Hora</label>
+                                        <input type="time" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label>Nome do Contato</label>
+                                    <input type="text" placeholder="Nome do cliente" value={form.contact_name} onChange={e => setForm({ ...form, contact_name: e.target.value })} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Observações</label>
+                                    <textarea placeholder="Detalhes importantes..." value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button className="cancel-btn" onClick={() => setShowModal(false)}>Cancelar</button>
+                                <button className="save-btn" onClick={handleSave}>Agendar Agora</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <style jsx>{`
+                    .page-header-premium {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 40px;
+                    }
+                    .title-row {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                    }
+                    .icon-box-premium {
+                        width: 48px;
+                        height: 48px;
+                        background: var(--bg-tertiary);
+                        border: 1px solid var(--border-color);
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--gold-primary);
+                    }
+                    .btn-create-premium {
+                        background: var(--gold-primary);
+                        color: #000;
+                        padding: 12px 24px;
+                        border-radius: 14px;
+                        font-weight: 800;
+                        font-size: 0.9rem;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        transition: var(--transition);
+                        box-shadow: 0 10px 20px rgba(202, 160, 91, 0.2);
+                        border: none;
+                        cursor: pointer;
+                    }
+                    .btn-create-premium:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 15px 30px rgba(202, 160, 91, 0.3);
+                    }
+
+                    .filter-container {
+                        display: flex;
+                        gap: 32px;
+                        margin-bottom: 40px;
+                        border-bottom: 1px solid var(--border-color);
+                        padding-bottom: 1px;
+                    }
+                    .filter-tab {
+                        background: transparent;
+                        border: none;
+                        color: var(--text-muted);
+                        font-weight: 700;
+                        font-size: 0.9rem;
+                        padding: 16px 0;
+                        cursor: pointer;
+                        position: relative;
+                        transition: var(--transition);
+                    }
+                    .filter-tab:hover { color: var(--text-primary); }
+                    .filter-tab.active { color: var(--gold-primary); }
+                    .active-dot {
+                        position: absolute;
+                        bottom: -1px;
+                        left: 0;
+                        right: 0;
+                        height: 2px;
+                        background: var(--gold-primary);
+                        box-shadow: 0 0 10px var(--gold-primary);
+                    }
+
+                    .schedule-list-premium {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                    }
+                    .schedule-card-premium {
+                        background: var(--bg-card);
+                        border: 1px solid var(--glass-border);
+                        border-radius: 24px;
+                        padding: 24px;
+                        display: flex;
+                        gap: 24px;
+                        align-items: center;
+                        transition: var(--transition);
+                        backdrop-filter: blur(10px);
+                    }
+                    .schedule-card-premium:hover {
+                        background: var(--bg-card-hover);
+                        border-color: rgba(202, 160, 91, 0.2);
+                        transform: translateX(10px);
+                    }
+                    
+                    .date-badge-premium {
+                        width: 70px;
+                        height: 90px;
+                        background: var(--bg-tertiary);
+                        border: 1px solid var(--border-color);
+                        border-radius: 18px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                    }
+                    .weekday { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+                    .day { font-size: 1.6rem; font-weight: 900; color: var(--gold-primary); margin: 2px 0; }
+                    .month { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); }
+
+                    .schedule-info { flex: 1; display: flex; justify-content: space-between; align-items: center; }
+                    .info-main h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
+                    .info-meta { display: flex; gap: 20px; }
+                    .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+                    
+                    .info-actions { display: flex; align-items: center; gap: 24px; }
+                    .status-pill {
+                        padding: 6px 14px;
+                        border-radius: 10px;
+                        font-size: 0.75rem;
+                        font-weight: 800;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                    .status-pill.pending { background: rgba(234, 179, 8, 0.1); color: #eab308; }
+                    .status-pill.confirmed { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+                    .status-pill.completed { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+                    .status-pill.cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+                    .action-buttons { display: flex; gap: 8px; }
+                    .icon-btn {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: var(--transition);
+                        border: 1px solid transparent;
+                    }
+                    .check-btn { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+                    .check-btn:hover { background: #10b981; color: #fff; }
+                    .del-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+                    .del-btn:hover { background: #ef4444; color: #fff; }
+
+                    /* MODAL STYLES */
+                    .modal-overlay-premium {
+                        position: fixed;
+                        inset: 0;
+                        background: rgba(0, 0, 0, 0.8);
+                        backdrop-filter: blur(10px);
+                        z-index: 1000;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px;
+                    }
+                    .modal-content-premium {
+                        background: var(--bg-secondary);
+                        width: 100%;
+                        max-width: 500px;
+                        border-radius: 32px;
+                        border: 1px solid var(--border-color);
+                        overflow: hidden;
+                        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+                    }
+                    .modal-header { padding: 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+                    .modal-header h3 { font-size: 1.25rem; font-weight: 800; color: #fff; }
+                    .close-btn { background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+                    
+                    .modal-body { padding: 32px; display: flex; flex-direction: column; gap: 20px; }
+                    .form-group { display: flex; flex-direction: column; gap: 10px; }
+                    .form-group label { font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+                    .modal-body input, .modal-body textarea {
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid var(--border-color);
+                        padding: 14px 18px;
+                        border-radius: 12px;
+                        color: #fff;
+                        font-size: 0.9rem;
+                        outline: none;
+                        transition: var(--transition);
+                    }
+                    .modal-body input:focus { border-color: var(--gold-primary); background: rgba(255, 255, 255, 0.08); }
+                    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+                    .modal-footer { padding: 32px; background: rgba(0,0,0,0.1); display: flex; gap: 16px; }
+                    .modal-footer button { flex: 1; padding: 14px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: var(--transition); border: none; }
+                    .cancel-btn { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+                    .cancel-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+                    .save-btn { background: var(--gold-primary); color: #000; box-shadow: 0 10px 20px rgba(202, 160, 91, 0.2); }
+                    .save-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(202, 160, 91, 0.3); }
+
+                    .empty-card-premium {
+                        background: var(--bg-card);
+                        border: 1px dashed var(--border-color);
+                        border-radius: 32px;
+                        padding: 80px 40px;
+                        text-align: center;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .empty-icon {
+                        width: 80px;
+                        height: 80px;
+                        background: rgba(255, 255, 255, 0.03);
+                        border-radius: 24px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--text-muted);
+                        margin-bottom: 24px;
+                    }
+                    .empty-card-premium h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
+                    .empty-card-premium p { color: var(--text-muted); max-width: 300px; line-height: 1.6; }
+
+                    .spinner-premium {
+                        width: 40px;
+                        height: 40px;
+                        border: 3px solid rgba(202, 160, 91, 0.1);
+                        border-top-color: var(--gold-primary);
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                    }
+                    @keyframes spin { to { transform: rotate(360deg); } }
+                    .loading-state-premium { display: flex; justify-content: center; padding: 100px 0; }
+                `}</style>
+            </main>
         </div>
     );
-}
-
-function X({ size = 20 }) {
-    return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>;
 }
