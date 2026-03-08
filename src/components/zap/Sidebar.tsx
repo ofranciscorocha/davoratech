@@ -44,16 +44,18 @@ export default function Sidebar() {
 
     const NavItem = ({ item }: { item: any }) => (
         <div
-            className={`nav-item ${pathname === item.path ? 'active' : ''}`}
+            className={`nav-item-wrapper ${pathname === item.path ? 'active' : ''}`}
             onClick={() => router.push(item.path)}
         >
-            <div className="icon-box-wrapper">
-                {item.icon}
+            <div className="nav-item-inner">
+                <div className="icon-container">
+                    {item.icon}
+                </div>
+                <span className="label-text">{item.label}</span>
+                {item.badge && (
+                    <span className="nav-badge">{item.badge}</span>
+                )}
             </div>
-            <span className="label-text">{item.label}</span>
-            {item.badge && (
-                <span className="nav-badge">{item.badge}</span>
-            )}
         </div>
     );
 
@@ -61,7 +63,7 @@ export default function Sidebar() {
         <aside className="sidebar">
             <div className="sidebar-logo">
                 <div className="logo-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z" />
                     </svg>
                 </div>
@@ -69,138 +71,164 @@ export default function Sidebar() {
             </div>
 
             <nav className="sidebar-nav">
-                {SECTIONS.map((section, idx) => (
-                    <div key={idx} className="nav-section">
-                        <div className="nav-section-label">{section.label}</div>
-                        {section.items.map(item => <NavItem key={item.path} item={item} />)}
-                    </div>
-                ))}
+                <div className="nav-scroll-area">
+                    {SECTIONS.map((section, idx) => (
+                        <div key={idx} className="nav-section">
+                            <div className="nav-section-label">{section.label}</div>
+                            <div className="section-items">
+                                {section.items.map(item => <NavItem key={item.path} item={item} />)}
+                            </div>
+                        </div>
+                    ))}
 
-                <div className="nav-item logout-btn" style={{ marginTop: 'auto', marginBottom: '40px' }}>
-                    <div className="icon-box-wrapper">
-                        {ICONS.logout}
+                    <div className="nav-section logout-section">
+                        <div className="nav-item-wrapper logout-btn">
+                            <div className="nav-item-inner">
+                                <div className="icon-container">
+                                    {ICONS.logout}
+                                </div>
+                                <span className="label-text">Sair do Sistema</span>
+                            </div>
+                        </div>
                     </div>
-                    <span>Sair do Sistema</span>
                 </div>
             </nav>
 
             <style jsx>{`
                 .sidebar {
-                    background: var(--bg-primary);
+                    background: #040813;
                     height: 100vh;
                     display: flex;
                     flex-direction: column;
-                    border-right: 1px solid var(--border-color);
+                    border-right: 1px solid rgba(255, 255, 255, 0.08);
                     width: 280px;
+                    transition: all 0.3s ease;
                 }
                 .sidebar-logo {
                     display: flex;
                     align-items: center;
                     gap: 14px;
-                    padding: 40px 32px 30px;
+                    padding: 40px 24px 30px;
                 }
                 .logo-box {
                     width: 44px;
                     height: 44px;
                     border-radius: 12px;
-                    background: var(--gold-primary);
+                    background: #facc15;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     color: #000;
                     flex-shrink: 0;
-                    box-shadow: 0 8px 16px rgba(250, 204, 21, 0.2);
+                    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.2);
                 }
                 .sidebar-logo h2 {
-                    font-size: 1.6rem;
+                    font-size: 1.5rem;
                     font-weight: 800;
-                    color: var(--text-primary);
+                    color: #ffffff;
                     letter-spacing: -1.2px;
                     margin: 0;
-                    display: flex;
-                    align-items: center;
                 }
                 .sidebar-logo .accent {
-                    color: var(--text-muted);
+                    color: #64748b;
+                    font-weight: 600;
                 }
 
                 .sidebar-nav {
-                    padding: 0 16px;
                     flex: 1;
-                    overflow-y: auto;
+                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                 }
                 
-                /* Custom Scrollbar */
-                .sidebar-nav::-webkit-scrollbar {
+                .nav-scroll-area {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding: 0 16px;
+                    scrollbar-width: thin;
+                    scrollbar-color: #64748b #ffffff;
+                }
+                
+                .nav-scroll-area::-webkit-scrollbar {
                     width: 8px;
                 }
-                .sidebar-nav::-webkit-scrollbar-track {
+                .nav-scroll-area::-webkit-scrollbar-track {
                     background: #ffffff;
-                    border-radius: 0;
                 }
-                .sidebar-nav::-webkit-scrollbar-thumb {
+                .nav-scroll-area::-webkit-scrollbar-thumb {
                     background: #64748b;
                     border-radius: 10px;
                     border: 2px solid #ffffff;
                 }
 
-                .nav-section { margin-bottom: 24px; }
+                .nav-section { margin-bottom: 28px; }
                 .nav-section-label {
                     font-size: 0.7rem;
                     font-weight: 800;
-                    color: var(--sidebar-nav-label);
-                    padding: 0 16px 16px;
+                    color: #475569;
+                    padding: 0 12px 14px;
                     letter-spacing: 0.15em;
                 }
 
-                .nav-item {
+                .section-items {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+
+                .nav-item-wrapper {
+                    padding: 0 12px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                .nav-item-inner {
                     height: 52px;
                     padding: 0 12px;
-                    border-radius: 14px;
+                    border-radius: 12px;
                     display: flex;
                     align-items: center;
                     gap: 14px;
                     font-size: 0.95rem;
                     font-weight: 600;
-                    color: var(--text-secondary);
-                    cursor: pointer;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    margin-bottom: 4px;
+                    color: #94a3b8;
+                    border: 1px solid transparent;
+                    transition: all 0.2s ease;
                 }
-                .nav-item:hover {
-                    color: var(--text-primary);
-                    background: rgba(255, 255, 255, 0.03);
+
+                .nav-item-wrapper:hover .nav-item-inner {
+                    color: #ffffff;
+                    background: rgba(255, 255, 255, 0.04);
+                    border-color: rgba(255, 255, 255, 0.08);
                 }
-                .nav-item.active {
-                    color: var(--text-primary);
-                    background: var(--bg-tertiary);
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+                .nav-item-wrapper.active .nav-item-inner {
+                    color: #ffffff;
+                    background: #101931;
+                    border-color: rgba(250, 204, 21, 0.15);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
                 }
                 
-                .icon-box-wrapper {
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 10px;
+                .icon-container {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 8px;
                     background: rgba(255, 255, 255, 0.03);
-                    border: 1px solid var(--border-color);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: inherit;
+                    flex-shrink: 0;
                     transition: all 0.2s ease;
                 }
-                .nav-item.active .icon-box-wrapper {
+
+                .nav-item-wrapper.active .icon-container {
                     background: rgba(250, 204, 21, 0.1);
                     border-color: rgba(250, 204, 21, 0.2);
-                    color: var(--gold-primary);
-                }
-                .nav-item:hover .icon-box-wrapper {
-                    background: rgba(255, 255, 255, 0.08);
+                    color: #facc15;
                 }
 
-                .label-text { flex: 1; }
+                .label-text { flex: 1; margin-left: 2px; }
                 
                 .nav-badge {
                     font-size: 0.7rem;
@@ -212,9 +240,10 @@ export default function Sidebar() {
                     border: 1px solid rgba(76, 119, 198, 0.2);
                 }
 
-                .logout-btn { color: #f87171 !important; opacity: 0.8; }
-                .logout-btn .icon-box-wrapper { border-color: rgba(248, 113, 113, 0.15); }
-                .logout-btn:hover { opacity: 1; background: rgba(248, 113, 113, 0.05); }
+                .logout-section { padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 20px; margin-bottom: 40px; }
+                .logout-btn .nav-item-inner { color: #f87171 !important; opacity: 0.8; }
+                .logout-btn:hover .nav-item-inner { opacity: 1; background: rgba(248, 113, 113, 0.05); border-color: rgba(248, 113, 113, 0.15); }
+                .logout-btn .icon-container { border-color: rgba(248, 113, 113, 0.1); }
 
                 @media (max-width: 1024px) {
                     .sidebar { display: none; }
