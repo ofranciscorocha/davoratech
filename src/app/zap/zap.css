@@ -1,5 +1,5 @@
-/* ROCHA ZAP - ULTRA PREMIUM REDESIGN BY ANTIGRAVITY
-   Inspired by Donezo Dashboard - High-Gloss finish.
+/* ROCHA ZAP - PREMIUM REDESIGN BY ANTIGRAVITY
+   Inspired by Donezo Dashboard - High-Gloss finish & Full Responsiveness.
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -14,7 +14,7 @@
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
 
-  /* Premium Palette (Dark) */
+  /* Premium Palette (Dark - Default) */
   --bg-primary: #040813;
   --bg-secondary: #080f24;
   --bg-tertiary: #0c1533;
@@ -31,6 +31,7 @@
   --accent-blue: #3b82f6;
   --border-color: rgba(255, 255, 255, 0.08);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
   background: var(--bg-primary);
   color: var(--text-primary);
 }
@@ -43,10 +44,12 @@
   --bg-card-hover: rgba(255, 255, 255, 1);
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-blur: 20px;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --border-color: rgba(0, 0, 0, 0.08);
+  --gold-primary: #b48a4d;
 }
 
 #rocha-zap-root * {
@@ -59,7 +62,7 @@
   width: 100%;
 }
 
-/* SIDEBAR FIXES */
+/* SIDEBAR */
 #rocha-zap-root .sidebar {
   width: 280px;
   background: var(--bg-primary);
@@ -87,12 +90,12 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   margin: 0;
+  color: var(--text-primary);
 }
 
 #rocha-zap-root .main-content {
   flex: 1;
   margin-left: 280px;
-  /* Offset the sidebar */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -101,7 +104,7 @@
   width: calc(100% - 280px);
 }
 
-/* HEADER Polish */
+/* HEADER */
 #rocha-zap-root .main-header {
   height: 80px;
   padding: 0 40px;
@@ -117,7 +120,7 @@
   z-index: 90;
 }
 
-/* Dashboard Content */
+/* DASHBOARD VIEWPORT */
 #rocha-zap-root .dashboard-viewport {
   padding: 48px;
   width: 100%;
@@ -134,7 +137,7 @@
   font-weight: 800;
   letter-spacing: -2px;
   margin: 0 0 12px;
-  background: linear-gradient(to right, #fff, var(--text-secondary));
+  background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -147,6 +150,7 @@
   margin-bottom: 32px;
 }
 
+/* CARDS UNIFIED */
 #rocha-zap-root .card,
 #rocha-zap-root .stat-card {
   background: var(--bg-card);
@@ -158,6 +162,7 @@
   transition: var(--transition);
   position: relative;
   overflow: hidden;
+  color: var(--text-primary);
 }
 
 #rocha-zap-root .card:hover,
@@ -165,14 +170,20 @@
   border-color: rgba(201, 160, 91, 0.3);
   transform: translateY(-4px);
   background: var(--bg-card-hover);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
+#rocha-zap-root.light-theme .card:hover,
+#rocha-zap-root.light-theme .stat-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* STATS ELEMENTS */
 #rocha-zap-root .stat-icon-box {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--gold-primary), 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,23 +191,23 @@
 }
 
 #rocha-zap-root .stat-label {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.1em;
 }
 
 #rocha-zap-root .stat-value {
-  font-size: 2.8rem;
+  font-size: 2.4rem;
   font-weight: 800;
   letter-spacing: -1.5px;
   margin: 8px 0;
   color: var(--text-primary);
 }
 
-/* RESPONSIVE */
-@media (max-width: 1280px) {
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1400px) {
   #rocha-zap-root .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -205,11 +216,17 @@
 @media (max-width: 1024px) {
   #rocha-zap-root .sidebar {
     transform: translateX(-100%);
+    pointer-events: none;
+    opacity: 0;
   }
 
   #rocha-zap-root .main-content {
     margin-left: 0;
     width: 100%;
+  }
+
+  #rocha-zap-root .main-header {
+    padding: 0 24px;
   }
 }
 
@@ -219,15 +236,19 @@
   }
 
   #rocha-zap-root .dashboard-viewport {
-    padding: 32px 16px;
+    padding: 32px 20px;
   }
 
-  #rocha-zap-root .main-header {
-    padding: 0 20px;
+  #rocha-zap-root .dashboard-title-area h1 {
+    font-size: 2rem;
+  }
+
+  #rocha-zap-root .main-charts-row {
+    grid-template-columns: 1fr !important;
   }
 }
 
-/* Anim */
+/* ANIMATIONS */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -243,4 +264,30 @@
 #rocha-zap-root .card,
 #rocha-zap-root .stat-card {
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* SEARCH BAR */
+#rocha-zap-root .search-bar-container {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  height: 48px;
+}
+
+#rocha-zap-root.light-theme .search-bar-container {
+  background: #f1f5f9;
+}
+
+#rocha-zap-root .search-bar-container input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
 }
