@@ -6,13 +6,15 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
-  /*
   async rewrites() {
     return [
       {
         source: '/zap/:path*',
-        destination: 'http://127.0.0.1:3005/zap/:path*',
+        destination: process.env.NODE_ENV === 'production'
+          ? 'https://rocha-zap-production.up.railway.app/zap/:path*'
+          : 'http://127.0.0.1:3005/zap/:path*',
       },
+      /*
       {
         source: '/select/:path*',
         destination: 'https://rochaselect-production.up.railway.app/:path*',
@@ -45,9 +47,9 @@ const nextConfig: NextConfig = {
         source: '/crm/:path*',
         destination: 'https://rochacrm-production.up.railway.app/:path*',
       },
+      */
     ];
   },
-  */
 };
 
 export default nextConfig;
