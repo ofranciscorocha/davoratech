@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       {
         source: '/zap/:path*',
         destination: process.env.NODE_ENV === 'production'
-          ? 'https://rocha-zap-production.up.railway.app/zap/:path*'
+          ? 'https://rocha-zap.vercel.app/zap/:path*'
           : 'http://127.0.0.1:3005/zap/:path*',
       },
       /*
