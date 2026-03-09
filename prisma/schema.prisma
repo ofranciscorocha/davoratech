@@ -147,6 +147,7 @@ model Auction {
   updatedAt           DateTime             @updatedAt
   lots                Lot[]                @relation("AuctionLots")
   habilitacoes        AuctionHabilitacao[]
+  internalControl     InternalControl?
 }
 
 model AuctionHabilitacao {
@@ -301,6 +302,53 @@ model Banner {
   position  String   @default("HOME_HERO")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// --- INTERNAL CONTROL MODELS (Pátio Rocha Leilões) ---
+
+model InternalControl {
+  id                   String   @id @default(cuid())
+  title                String
+  type                 String   // Financeira, Seguradora, Prefeitura, Trânsito, Público Administrativo, Órgão Público, Extrajudicial, Judicial
+  status               String   @default("PROSPECCAO") // PROSPECCAO, DOCUMENTACAO, AVALIACAO, PRONTO, PUBLICADO, SUSPENSO, CANCELADO
+  
+  // Organização Geral
+  demands              String?  @db.Text
+  meetings             String?  @db.Text
+  inspections          String?  @db.Text
+  tasks                String?  @db.Text // Tarefas internas
+  notes                String?  @db.Text
+  
+  // Documentação Geral
+  documents            InternalDocument[]
+  
+  // Judicial Specific Fields
+  processNumber        String?
+  parties              String?  // Partes do processo
+  officialLettersSent  String?  @db.Text // Ofícios enviados
+  importantDocsInfo    String?  @db.Text
+  evaluationReportUrl  String?
+  seizureInfo          String?  @db.Text // Penhora
+  seizedPropertyDocs   String?  @db.Text
+  edictUrl             String?
+  auctionDate          DateTime?
+  
+  // Relation to public auction if/when linked
+  auctionId            String?  @unique
+  auction              Auction? @relation(fields: [auctionId], references: [id])
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model InternalDocument {
+  id                String          @id @default(cuid())
+  name              String
+  url               String
+  type              String?         // Ofício, Laudo, Edital, etc.
+  internalControlId String
+  internalControl   InternalControl @relation(fields: [internalControlId], references: [id], onDelete: Cascade)
+  createdAt         DateTime        @default(now())
 }
 
 // --- RECICLADORA MODELS (from Recicladora Rocha) ---
