@@ -24,7 +24,7 @@ export default function LeiloesPage() {
                         alt="Pátio Rocha Leilões - Infraestrutura"
                         className="absolute inset-0 w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-[#0a1b3f]/80" />
+                    <div className="absolute inset-0 bg-[#080c17]/80" />
                     <div className="relative z-10 h-full container max-w-7xl mx-auto px-4 flex flex-col items-center justify-center text-center">
                         <div className="mb-6 h-1 w-24 bg-[#c9a05b] rounded-full" />
                         <h2 className="text-3xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-6">

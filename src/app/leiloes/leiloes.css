@@ -1,10 +1,10 @@
 /* Pátio Rocha Leilões Design System */
 
 :root {
-    --leilao-gold: #c9a05b;
-    --leilao-gold-dark: #b88a44;
-    --leilao-brand: #0a1b3f;
-    --leilao-brand-light: #162a5c;
+    --leilao-gold: #D4AF37;
+    --leilao-gold-dark: #B8860B;
+    --leilao-brand: #080c17;
+    --leilao-brand-light: #121826;
     --leilao-accent: #D4AF37;
 }
 
@@ -45,7 +45,7 @@
 
 /* Common button styles */
 .leilao-btn-primary {
-    background: #0a1b3f;
+    background: #080c17;
     color: white;
     font-weight: 800;
     text-transform: uppercase;
@@ -56,7 +56,7 @@
 }
 
 .leilao-btn-primary:hover {
-    background: #c9a05b;
+    background: #D4AF37;
     transform: translateY(-2px);
 }
 

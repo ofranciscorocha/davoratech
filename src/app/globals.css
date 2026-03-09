@@ -3,10 +3,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #0a192f;
-  --color-gold: #c5a059;
-  --color-gold-light: #e6c27a;
-  --color-navy: #001f3f;
+  --color-primary: #080c17;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F9E2AF;
+  --color-navy: #080c17;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

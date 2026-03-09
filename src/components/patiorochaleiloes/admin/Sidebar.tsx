@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -24,9 +25,9 @@ import {
     Settings,
     ChevronDown,
     ChevronRight,
-    ClipboardCheck
+    ClipboardCheck,
+    Circle
 } from 'lucide-react'
-import { useState } from 'react'
 
 type SidebarSubItem = { href: string; label: string; icon?: any; };
 type SidebarItem = { href: string; label: string; icon: any; subItems?: SidebarSubItem[] };
@@ -111,7 +112,7 @@ export function Sidebar() {
 
     return (
         <div className="flex flex-col h-full w-[230px] bg-[#222d32] text-[#b8c7ce] select-none transition-all duration-300">
-            {/* Logo Area - Restored to match original 1:1 */}
+            {/* Logo Area */}
             <div className="flex h-[50px] items-center justify-center bg-[#367fa9] text-white px-2">
                 <img
                     src="/assets/logo-patio-rocha.png"
@@ -167,7 +168,7 @@ export function Sidebar() {
                                                                                 isSubActive ? "text-white" : "text-[#8aa4af] hover:text-white"
                                                                             )}
                                                                         >
-                                                                            <RecordIcon className="h-3 w-3" />
+                                                                            <Circle className="h-2 w-2 fill-current" />
                                                                             <span>{sub.label}</span>
                                                                         </Link>
                                                                     </li>
@@ -198,13 +199,5 @@ export function Sidebar() {
                 </nav>
             </div>
         </div>
-    )
-}
-
-function RecordIcon(props: React.SVGProps<SVGSVGElement>) {
-    return (
-        <svg fill="currentColor" viewBox="0 0 16 16" {...props}>
-            <circle cx="8" cy="8" r="4" />
-        </svg>
     )
 }

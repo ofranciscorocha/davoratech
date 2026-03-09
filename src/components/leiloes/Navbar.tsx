@@ -27,13 +27,10 @@ const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#0a1b3f] backdrop-blur-md">
+        <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#080c17] backdrop-blur-md">
             <div className="container max-w-7xl mx-auto px-4 flex h-16 items-center justify-between">
                 <Link href="/leiloes" className="flex items-center gap-2">
-                    <div className="text-[#c9a05b]">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
-                    </div>
-                    <h1 className="text-xl font-black uppercase tracking-widest text-white italic"><span className="text-[#c9a05b]">PÁTIO</span> ROCHA</h1>
+                    <img src="/arremate-logo-dark.png" alt="Arremate Club" className="h-10 w-auto" />
                 </Link>
 
                 {/* Desktop nav */}
@@ -57,7 +54,7 @@ const Navbar = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 4 }}
                                             transition={{ duration: 0.15 }}
-                                            className="absolute left-0 top-full z-50 mt-1 w-56 overflow-hidden rounded-xl border border-white/10 bg-[#0a1b3f] py-2 shadow-2xl"
+                                            className="absolute left-0 top-full z-50 mt-1 w-56 overflow-hidden rounded-xl border border-white/10 bg-[#080c17] py-2 shadow-2xl"
                                         >
                                             {link.children.map((child) => (
                                                 <Link
@@ -103,7 +100,7 @@ const Navbar = () => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden border-t border-white/10 bg-[#0a1b3f] lg:hidden"
+                        className="overflow-hidden border-t border-white/10 bg-[#080c17] lg:hidden"
                     >
                         <div className="container py-6 flex flex-col gap-2 px-4 text-center">
                             {navLinks.map((link) => (

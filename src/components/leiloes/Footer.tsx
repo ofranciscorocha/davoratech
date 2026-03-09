@@ -4,15 +4,12 @@ import Link from "next/link";
 
 const Footer = () => {
     return (
-        <footer className="bg-[#0a1b3f] py-20 border-t border-white/10" id="contato">
+        <footer className="bg-[#080c17] py-20 border-t border-white/10" id="contato">
             <div className="container max-w-7xl mx-auto px-4">
                 <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                         <Link href="/leiloes" className="mb-6 flex items-center gap-2">
-                            <div className="text-[#c9a05b]">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
-                            </div>
-                            <h1 className="text-2xl font-black uppercase tracking-widest text-white italic"><span className="text-[#c9a05b]">PÁTIO</span> ROCHA</h1>
+                            <img src="/arremate-logo-dark.png" alt="Arremate Club" className="h-12 w-auto" />
                         </Link>
                         <p className="text-sm font-medium text-white/40 leading-relaxed uppercase tracking-tighter">
                             A maior e mais segura plataforma de leilões do Brasil. Tradição familiar com inovação tecnológica.
@@ -59,7 +56,7 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-16 border-t border-white/5 pt-10 text-center text-[10px] font-black uppercase tracking-[0.4em] text-white/20">
-                    © {new Date().getFullYear()} Pátio Rocha Leilões. Excelência em Arrematação.
+                    © {new Date().getFullYear()} Arremate Club. Excelência em Arrematação.
                 </div>
             </div>
         </footer>

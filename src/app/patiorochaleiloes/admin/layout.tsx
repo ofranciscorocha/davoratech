@@ -1,3 +1,4 @@
+import React from 'react'
 import { Sidebar } from '@/components/patiorochaleiloes/admin/Sidebar'
 import { Header } from '@/components/patiorochaleiloes/admin/Header'
 
