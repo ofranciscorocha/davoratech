@@ -35,7 +35,7 @@ export default function LeiloesPage() {
                         </p>
                         <div className="flex items-center gap-4 text-[#c9a05b] font-black text-xs uppercase tracking-[0.3em]">
                             <span className="h-[1px] w-12 bg-[#c9a05b]" />
-                            Pátio Rocha Leilões
+                            Arremate Club
                             <span className="h-[1px] w-12 bg-[#c9a05b]" />
                         </div>
                     </div>

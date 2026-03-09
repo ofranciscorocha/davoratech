@@ -65,7 +65,7 @@ const HeroSection = () => {
                             placeholder="Buscar por lote, marca, modelo ou cidade..."
                             className="flex-1 border-0 bg-transparent px-8 py-4 text-white text-sm font-medium outline-none placeholder:text-white/30"
                         />
-                        <button type="submit" className="bg-[#D4AF37] text-white rounded-xl px-10 py-4 font-black uppercase text-xs tracking-widest hover:bg-[#B8860B] transition-all flex items-center gap-3 shadow-lg">
+                        <button type="submit" className="bg-[#c9a05b] text-white rounded-xl px-10 py-4 font-black uppercase text-xs tracking-widest hover:bg-[#b88a44] transition-all flex items-center gap-3 shadow-lg">
                             <Search className="h-4 w-4" />
                             Pesquisar
                         </button>

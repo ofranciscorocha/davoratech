@@ -12,7 +12,7 @@ const Footer = () => {
                             <img src="/arremate-logo-dark.png" alt="Arremate Club" className="h-12 w-auto" />
                         </Link>
                         <p className="text-sm font-medium text-white/40 leading-relaxed uppercase tracking-tighter">
-                            A maior e mais segura plataforma de leilões do Brasil. Tradição familiar com inovação tecnológica.
+                            A maior e mais segura plataforma de leilões do Brasil. Inteligência total em arrematação.
                         </p>
                     </div>
 

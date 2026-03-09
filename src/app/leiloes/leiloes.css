@@ -1,11 +1,11 @@
 /* Pátio Rocha Leilões Design System */
 
 :root {
-    --leilao-gold: #D4AF37;
-    --leilao-gold-dark: #B8860B;
+    --leilao-gold: #c9a05b;
+    --leilao-gold-dark: #b88a44;
     --leilao-brand: #080c17;
     --leilao-brand-light: #121826;
-    --leilao-accent: #D4AF37;
+    --leilao-accent: #c9a05b;
 }
 
 #leiloes-root {
