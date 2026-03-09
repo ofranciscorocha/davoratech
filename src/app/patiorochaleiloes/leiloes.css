@@ -1,9 +1,23 @@
 /* PATIO ROCHA LEILÕES SCOPED CSS */
 #leiloes-root {
-    --primary: #c9a05b;
-    --brand: #0a1b3f;
-    --background: #ffffff;
-    --foreground: #1a1a1a;
+    --primary: #D4AF37;
+    --gold-hover: #B8860B;
+}
+
+.dark #leiloes-root {
+    --background: #0a0f1a;
+    --foreground: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+    --text-muted: #94a3b8;
+}
+
+.light #leiloes-root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text-muted: #64748b;
 }
 
 #leiloes-root {
@@ -12,14 +26,35 @@
     min-height: 100vh;
 }
 
-#leiloes-root .header {
-    background-color: var(--brand);
-    color: white;
+.text-gold {
+    color: var(--primary);
 }
 
-#leiloes-root .btn-gold {
+.bg-gold {
     background-color: var(--primary);
-    color: white;
 }
 
-/* Add remaining Leilões styles here, scoped to #leiloes-root */
+.border-gold {
+    border-color: var(--primary);
+}
+
+/* Theme Aware Utilities */
+.text-foreground {
+    color: var(--foreground);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.bg-card {
+    background-color: var(--card-bg);
+}
+
+.border-theme {
+    border-color: var(--border);
+}
+
+.bg-background {
+    background-color: var(--background);
+}

@@ -172,6 +172,43 @@ function initializeDatabase(db: any) {
   const masterTenantId = 'tenant-master';
   db.prepare("INSERT OR IGNORE INTO tenants (id, name, slug) VALUES (?, ?, ?)")
     .run(masterTenantId, 'Master Admin', 'master');
+
+  // Seed Agents if empty
+  const agentCount = db.prepare("SELECT count(*) as count FROM agents").get().count;
+  if (agentCount === 0) {
+    console.log('[DB] Seeding default agents...');
+    const agents = [
+      { id: 'agent-comercial', name: 'COMERCIAL', type: 'commercial', desc: 'Focado em vendas e conversão.', prompt: 'Você é o Agente Comercial da Rocha. Seu foco é converter leads em clientes. Seja persuasivo e profissional.' },
+      { id: 'agent-qualificador', name: 'QUALIFICADOR', type: 'qualifier', desc: 'Identifica o perfil do lead.', prompt: 'Você é o Agente Qualificador da Rocha. Identifique se o lead possui orçamento, autoridade e necessidade.' },
+      { id: 'agent-sucesso', name: 'SUCESSO DO CLIENTE', type: 'success', desc: 'Suporte e relacionamento.', prompt: 'Você é o Agente de Sucesso do Cliente. Resolva dúvidas com empatia e agilidade.' }
+    ];
+
+    for (const a of agents) {
+      db.prepare(`
+        INSERT INTO agents (id, tenant_id, name, type, description, system_prompt, temperature, is_active)
+        VALUES (?, ?, ?, ?, ?, ?, 0.7, 1)
+      `).run(a.id, masterTenantId, a.name, a.type, a.desc, a.prompt);
+    }
+  }
+
+  // Seed Default Settings
+  db.prepare("INSERT OR IGNORE INTO settings (tenant_id, key, value, category) VALUES (?, ?, ?, ?)")
+    .run(masterTenantId, 'auto_reply_audio', 'false', 'ai_behavior');
+
+  // Seed Knowledge Base if empty
+  const kbCount = db.prepare("SELECT count(*) as count FROM knowledge_base").get().count;
+  if (kbCount === 0) {
+    console.log('[DB] Seeding default knowledge base...');
+    const items = [
+      { title: 'Sobre a Rocha', cat: 'Institucional', content: 'A Rocha é líder em automação Inteligente para negócios.' },
+      { title: 'Preços Rocha Zap', cat: 'Vendas', content: 'Planos a partir de R$ 299/mês.' },
+      { title: 'Suporte Técnico', cat: 'Suporte', content: 'Atendimento via WhatsApp ou Ticket.' }
+    ];
+    for (const item of items) {
+      db.prepare(`INSERT INTO knowledge_base (tenant_id, title, category, content) VALUES (?, ?, ?, ?)`)
+        .run(masterTenantId, item.title, item.cat, item.content);
+    }
+  }
 }
 
 export default getDatabase;

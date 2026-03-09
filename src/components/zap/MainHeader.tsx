@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { Menu } from 'lucide-react';
+import { useUI } from '@/context/UIContext';
 
 interface MainHeaderProps {
     title?: string;
@@ -7,6 +9,7 @@ interface MainHeaderProps {
 
 export default function MainHeader({ title }: MainHeaderProps) {
     const [isLight, setIsLight] = useState(false);
+    const { isSidebarOpen, toggleSidebar, setSidebarOpen } = useUI();
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('zap-theme');
@@ -35,6 +38,12 @@ export default function MainHeader({ title }: MainHeaderProps) {
     return (
         <header className="main-header">
             <div className="header-left">
+                <button
+                    className="mobile-trigger"
+                    onClick={toggleSidebar}
+                >
+                    <Menu size={24} />
+                </button>
                 <div className="search-bar-container">
                     <span className="search-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
@@ -68,7 +77,41 @@ export default function MainHeader({ title }: MainHeaderProps) {
                 </div>
             </div>
 
+            {/* Backdrop for mobile */}
+            {isSidebarOpen && (
+                <div
+                    className="mobile-backdrop"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
             <style jsx>{`
+                .mobile-trigger {
+                    display: none;
+                    align-items: center;
+                    justify-content: center;
+                    background: transparent;
+                    border: none;
+                    color: #fff;
+                    cursor: pointer;
+                    margin-right: 12px;
+                }
+                .mobile-backdrop {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.5);
+                    backdrop-filter: blur(4px);
+                    z-index: 999;
+                }
+                @media (max-width: 1024px) {
+                    .mobile-trigger { display: flex; }
+                    .main-header { padding: 0 20px; }
+                    .search-bar-container { display: none; }
+                    .user-profile-badge .profile-info { display: none; }
+                }
                 .main-header {
                     height: 80px;
                     padding: 0 40px;

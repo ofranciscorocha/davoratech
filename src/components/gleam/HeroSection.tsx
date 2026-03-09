@@ -15,7 +15,7 @@ const HeroSection = () => {
         <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden py-20 px-4">
             <div className="absolute inset-0">
                 <img
-                    src="/assets/banner-patio.jpg"
+                    src="/assets/banner-patio.png"
                     alt="Pátio Rocha Leilões Background"
                     className="h-full w-full object-cover"
                     onError={(e) => {

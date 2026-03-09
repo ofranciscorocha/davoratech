@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 
 const navLinks = [
     { label: "Início", href: "#inicio" },
@@ -10,6 +11,7 @@ const navLinks = [
     { label: "Parceiros", href: "#parceiros" },
     { label: "Certificados", href: "#certificados" },
     { label: "Contato", href: "#contato" },
+    { label: "Painel Admin", href: "/recicladora/admin", isPremium: true },
 ];
 
 const Header = () => {
@@ -18,20 +20,27 @@ const Header = () => {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 bg-[#1a4731]/95 backdrop-blur-md border-b border-white/10">
             <div className="container flex items-center justify-between h-16 md:h-20 max-w-7xl mx-auto px-4">
-                <a href="#inicio" className="flex items-center gap-3">
-                    <img src="https://static.wixstatic.com/media/06093b_99f2e3a8907340d0a7a0b3f3b9e4a3b3~mv2.png/v1/fill/w_360,h_102,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo-white.png" alt="Recicladora Rocha" className="h-12 md:h-14 w-auto" />
-                </a>
+                <Link href="/recicladora" className="flex items-center gap-3">
+                    <img src="/assets/logo-recicladora.png" alt="Recicladora Rocha" className="h-10 md:h-12 w-auto" />
+                    <div className="hidden sm:block">
+                        <span className="text-white font-black text-lg tracking-tighter uppercase leading-none block">Recicladora <span className="text-[#8ec448]">Rocha</span></span>
+                        <span className="text-[#8ec448] text-[9px] font-bold uppercase tracking-[0.2em]">Sustentabilidade</span>
+                    </div>
+                </Link>
 
                 {/* Desktop nav */}
                 <nav className="hidden lg:flex items-center gap-1">
                     {navLinks.map((link) => (
-                        <a
+                        <Link
                             key={link.href}
                             href={link.href}
-                            className="px-4 py-2 text-sm font-medium text-white/80 hover:text-white transition-colors rounded-md hover:bg-white/10"
+                            className={`px-4 py-2 text-sm font-bold uppercase tracking-widest transition-all rounded-xl ${link.isPremium
+                                    ? 'bg-[#8ec448] text-[#1a4731] hover:bg-[#76b139] shadow-lg shadow-[#8ec448]/20 active:scale-95'
+                                    : 'text-white/80 hover:text-white hover:bg-white/10'
+                                }`}
                         >
                             {link.label}
-                        </a>
+                        </Link>
                     ))}
                 </nav>
 

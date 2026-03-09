@@ -4,7 +4,7 @@ const Footer = () => {
             <div className="container max-w-7xl mx-auto px-4 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-10">
                     <div className="flex items-center gap-6">
-                        <img src="/assets/logo-white.png" alt="Recicladora Rocha" className="h-16 w-auto" />
+                        <img src="/assets/logo-recicladora.png" alt="Recicladora Rocha Logo" className="h-12 md:h-14 mb-6 opacity-80" />
                         <div className="text-left">
                             <p className="text-2xl font-black text-white tracking-widest">Recicladora <span className="text-[#8ec448]">Rocha</span></p>
                             <p className="text-white/40 text-xs font-bold uppercase tracking-[0.3em]">Reciclar, reutilizar, reaproveitar</p>

@@ -205,12 +205,59 @@
   }
 
   #rocha-zap-root .dashboard-viewport {
-    padding: 30px 20px;
+    padding: 24px 16px;
   }
 
   #rocha-zap-root .page-header-premium {
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 20px;
+  }
+
+  #rocha-zap-root h1 {
+    font-size: 1.75rem;
+  }
+
+  #rocha-zap-root .title-row {
+    gap: 12px;
+  }
+
+  #rocha-zap-root .icon-box-premium {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  #rocha-zap-root .btn-create-premium {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+  }
+
+  #rocha-zap-root .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  #rocha-zap-root .filter-container {
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  #rocha-zap-root .filter-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  #rocha-zap-root .filter-tab {
+    white-space: nowrap;
+    padding: 12px 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  #rocha-zap-root .stats-grid {
+    grid-template-columns: 1fr;
   }
 }

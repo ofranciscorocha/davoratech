@@ -172,6 +172,22 @@ export default function SettingsPage() {
                                                 onChange={(e) => updateSetting('system_name', e.target.value)}
                                             />
                                         </div>
+                                        <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px' }}>
+                                            <div>
+                                                <label style={{ marginBottom: '4px', display: 'block' }}>Responder por áudio</label>
+                                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Converte respostas de texto em voz automaticamente</span>
+                                            </div>
+                                            <input
+                                                type="checkbox"
+                                                style={{ width: '20px', height: '20px', accentColor: 'var(--gold-primary)', cursor: 'pointer' }}
+                                                checked={settings.auto_reply_audio === 'true'}
+                                                onChange={(e) => {
+                                                    const val = e.target.checked ? 'true' : 'false';
+                                                    updateSetting('auto_reply_audio', val);
+                                                    saveOneSetting('auto_reply_audio', val);
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

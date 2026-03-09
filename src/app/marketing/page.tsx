@@ -123,7 +123,7 @@ export default function MarketingPage() {
     ];
 
     return (
-        <div id="marketing-root" className="min-h-screen bg-gray-50 flex flex-col md:flex-row overflow-hidden h-screen font-sans">
+        <div id="marketing-root" className="min-h-screen bg-gray-50 flex flex-col md:flex-row font-sans">
             {/* Mobile Top Bar */}
             <div className="md:hidden bg-[#0a192f] p-4 flex items-center justify-between border-b border-white/10 z-50 shrink-0">
                 <div>
@@ -138,10 +138,18 @@ export default function MarketingPage() {
                 </button>
             </div>
 
+            {/* Mobile Menu Backdrop */}
+            {isMobileMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[45] md:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
             <aside className={`
                 fixed inset-y-0 left-0 w-72 bg-gradient-to-b from-[#0a192f] to-[#112240] flex flex-col shadow-2xl z-50 transition-transform duration-300 transform
-                md:relative md:translate-x-0 md:w-64 md:z-auto
+                md:relative md:translate-x-0 md:w-64 md:z-auto md:h-screen
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 <div className="p-6 border-b border-white/10 hidden md:block">

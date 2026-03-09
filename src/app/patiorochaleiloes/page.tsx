@@ -49,9 +49,9 @@ export default async function Home() {
                 <HowItWorksSection />
 
                 {/* Banner do Pátio */}
-                <section className="relative w-full h-[400px] overflow-hidden">
+                <section className="relative w-full h-[450px] overflow-hidden">
                     <img
-                        src="/assets/banner-patio.jpg"
+                        src="/assets/banner-patio.png"
                         alt="Pátio Rocha Leilões - Vista do Pátio"
                         className="absolute inset-0 w-full h-full object-cover"
                     />

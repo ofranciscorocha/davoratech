@@ -96,7 +96,7 @@ export function SystemCard({ title, description, icon: Icon, logoUrl, href, stat
             whileHover={isActive ? { y: -8, scale: 1.02 } : {}}
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className={cn(
-                "relative p-8 rounded-[2.5rem] border bg-slate-900/40 backdrop-blur-md transition-all h-full flex flex-col group",
+                "relative p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border bg-slate-900/40 backdrop-blur-md transition-all h-full flex flex-col group",
                 isActive
                     ? "border-white/10 hover:border-gold/50 cursor-pointer shadow-xl hover:shadow-gold/10"
                     : "border-white/5 opacity-60 grayscale",
@@ -105,13 +105,13 @@ export function SystemCard({ title, description, icon: Icon, logoUrl, href, stat
         >
             <div className="flex justify-between items-start mb-6">
                 <div className={cn(
-                    "p-4 rounded-2xl bg-gradient-to-br min-w-24 h-24 flex items-center justify-center",
+                    "p-4 rounded-2xl bg-gradient-to-br min-w-20 md:min-w-24 h-20 md:h-24 flex items-center justify-center",
                     isActive ? "from-gold/20 to-gold/5 text-gold" : "from-slate-700 to-slate-800 text-slate-400"
                 )}>
                     {logoUrl ? (
-                        <img src={logoUrl} alt={title} className="w-16 h-16 object-contain" />
+                        <img src={logoUrl} alt={title} className="w-12 h-12 md:w-16 md:h-16 object-contain" />
                     ) : (
-                        <Icon className="w-12 h-12" />
+                        <Icon className="w-10 h-10 md:w-12 md:h-12" />
                     )}
                 </div>
                 {isActive && (

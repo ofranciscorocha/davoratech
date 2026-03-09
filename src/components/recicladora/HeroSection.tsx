@@ -5,17 +5,19 @@ const HeroSection = () => {
     return (
         <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden">
             {/* Background image - using the unsplash reference from the original build as fallback if local asset is missing */}
-            <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')` }}
-            />
-            {/* Overlay - replicated original gradient */}
-            <div className="absolute inset-0 bg-black/60 md:bg-transparent md:bg-gradient-to-r md:from-[#1a4731]/95 md:via-[#1a4731]/80 md:to-transparent" />
+            <div className="absolute inset-0">
+                <div className="absolute inset-0 bg-[#1a4731]/80 backdrop-blur-[2px]" />
+                <img
+                    src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80"
+                    alt="Recycling Background"
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
             <div className="relative z-10 container text-center lg:text-left py-32 max-w-7xl mx-auto px-4">
                 <img
-                    src="https://static.wixstatic.com/media/06093b_99f2e3a8907340d0a7a0b3f3b9e4a3b3~mv2.png/v1/fill/w_360,h_102,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo-white.png"
-                    alt="Recicladora Rocha"
+                    src="/assets/logo-recicladora.png"
+                    alt="Recicladora Rocha Logo"
                     className="h-28 md:h-36 w-auto mb-8 mx-auto lg:mx-0 animate-fade-up"
                 />
                 <p className="text-sm md:text-base text-white/80 font-bold uppercase tracking-[0.4em] mb-4 animate-fade-up">

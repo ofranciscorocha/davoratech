@@ -60,8 +60,8 @@ export function Agenda() {
     const todayTasks = tasks.filter(t => t.date === todayDate);
 
     return (
-        <div className="bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-md shadow-xl">
-            <div className="flex items-center justify-between mb-8">
+        <div className="bg-slate-900/40 border border-white/5 rounded-3xl md:rounded-[2.5rem] p-5 md:p-8 backdrop-blur-md shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div className="flex items-center gap-4">
                     <div className="p-3 rounded-2xl bg-gold/10 text-gold">
                         <Calendar className="w-6 h-6" />

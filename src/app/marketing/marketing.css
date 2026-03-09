@@ -4,12 +4,11 @@
     --marketing-dark: #0a192f;
     --marketing-dark-light: #112240;
     --marketing-teal: #009688;
-    display: flex;
-    flex-direction: column;
     height: 100vh;
     width: 100%;
     font-family: 'Segoe UI', Arial, sans-serif;
     background-color: #f8fafc;
+    overflow: hidden;
 }
 
 #marketing-root *,
@@ -21,6 +20,24 @@
 /* Sidebar Styling */
 #marketing-root .sidebar-marketing {
     background: linear-gradient(to bottom, #0a192f, #112240);
+}
+
+#marketing-root main {
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10;
+}
+
+@media (min-width: 768px) {
+    #marketing-root {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #marketing-root main {
+        flex: 1;
+    }
 }
 
 #marketing-root .nav-item-active {

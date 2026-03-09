@@ -1,6 +1,8 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useUI } from '@/context/UIContext';
+import { X } from 'lucide-react';
 
 const ICONS = {
     dashboard: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>,
@@ -21,6 +23,7 @@ const SECTIONS = [
             { label: 'Conversas', icon: ICONS.conversations, path: '/zap/conversations', badge: '12+' },
             { label: 'Contatos', icon: ICONS.contacts, path: '/zap/contacts' },
             { label: 'Agendas', icon: ICONS.scheduling, path: '/zap/scheduling' },
+            { label: 'Instagram', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>, path: '#', badge: 'Breve' },
         ]
     },
     {
@@ -41,9 +44,15 @@ const SECTIONS = [
 export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
+    const { isSidebarOpen, setSidebarOpen } = useUI();
+
+    const handleNavigate = (path: string) => {
+        router.push(path);
+        setSidebarOpen(false); // Close sidebar on navigation
+    };
 
     return (
-        <aside className="sidebar-rocha">
+        <aside className={`sidebar-rocha ${isSidebarOpen ? 'mobile-open' : ''}`}>
             <div className="logo-header">
                 <div className="logo-square">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -51,6 +60,12 @@ export default function Sidebar() {
                     </svg>
                 </div>
                 <h2>ROCHA<span>ZAP</span></h2>
+                <button
+                    className="mobile-close"
+                    onClick={() => setSidebarOpen(false)}
+                >
+                    <X size={24} />
+                </button>
             </div>
 
             <div className="nav-scroller">
@@ -61,7 +76,7 @@ export default function Sidebar() {
                             <div
                                 key={item.path}
                                 className={`nav-item-rect ${pathname === item.path ? 'active' : ''}`}
-                                onClick={() => router.push(item.path)}
+                                onClick={() => handleNavigate(item.path)}
                             >
                                 <div className="icon-wrap">
                                     {item.icon}
@@ -240,7 +255,30 @@ export default function Sidebar() {
                 }
 
                 @media (max-width: 1024px) {
-                    .sidebar-rocha { display: none; }
+                    .sidebar-rocha { 
+                        display: flex;
+                        transform: translateX(-100%);
+                        z-index: 1000;
+                        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+                    }
+                    .sidebar-rocha.mobile-open {
+                        transform: translateX(0);
+                    }
+                    .mobile-close {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: transparent;
+                        border: none;
+                        color: #64748b;
+                        padding: 8px;
+                        margin-left: auto;
+                        cursor: pointer;
+                    }
+                }
+                @media (min-width: 1025px) {
+                    .mobile-close { display: none; }
                 }
             `}</style>
         </aside>
