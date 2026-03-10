@@ -14,6 +14,18 @@ const nextConfig: NextConfig = {
           ? 'https://rocha-zap-production.up.railway.app/zap/:path*'
           : 'http://127.0.0.1:3005/zap/:path*',
       },
+      {
+        source: '/marketing',
+        destination: process.env.NODE_ENV === 'production'
+          ? 'https://rocha-marketing-production.up.railway.app/marketing'
+          : 'http://127.0.0.1:3006/marketing',
+      },
+      {
+        source: '/marketing/:path*',
+        destination: process.env.NODE_ENV === 'production'
+          ? 'https://rocha-marketing-production.up.railway.app/marketing/:path*'
+          : 'http://127.0.0.1:3006/marketing/:path*',
+      },
       /*
       {
         source: '/select/:path*',
@@ -26,14 +38,6 @@ const nextConfig: NextConfig = {
       {
         source: '/atelie/:path*',
         destination: 'https://laura-verissimo-production.up.railway.app/:path*',
-      },
-      {
-        source: '/marketing',
-        destination: 'http://127.0.0.1:5173/marketing/',
-      },
-      {
-        source: '/marketing/:path*',
-        destination: 'http://127.0.0.1:5173/marketing/:path*',
       },
       {
         source: '/patiorochaleiloes/:path*',
