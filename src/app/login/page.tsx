@@ -7,28 +7,39 @@ import { motion } from 'framer-motion';
 import { Lock, Mail, ArrowRight, Loader2, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLogo } from '@/context/LogoContext';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
     const { logoUrl } = useLogo();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setError(null);
 
-        // Actual login check
-        setTimeout(() => {
-            setIsLoading(false);
-            if (email === 'master' && password === 'master') {
-                localStorage.setItem('rocha_tec_auth', 'true');
-                router.push('/dashboard');
+        try {
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+            });
+
+            if (result?.error) {
+                setError('Credenciais inválidas. Use master/master ou sua conta.');
             } else {
-                alert('Credenciais inválidas. Use master/master.');
+                router.push('/dashboard');
             }
-        }, 800);
+        } catch (err) {
+            setError('Ocorreu um erro ao tentar entrar.');
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -58,6 +69,12 @@ export default function LoginPage() {
                         <h1 className="text-2xl font-bold text-white tracking-tight">Rocha Tec</h1>
                         <p className="text-slate-400 text-sm mt-1">Acesse sua central de ferramentas</p>
                     </div>
+
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center rounded-xl animate-shake">
+                            {error}
+                        </div>
+                    )}
 
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2">

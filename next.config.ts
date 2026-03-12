@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/patiorochaleiloes/:path*',
-        destination: 'https://leilao-patio-rocha.vercel.app/:path*',
+        destination: 'https://leilao-patio-rocha.vercel.app/patiorochaleiloes/:path*',
       },
       {
         source: '/licitacoes/:path*',
