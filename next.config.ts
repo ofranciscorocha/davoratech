@@ -26,7 +26,6 @@ const nextConfig: NextConfig = {
           ? 'https://rocha-marketing-production.up.railway.app/marketing/:path*'
           : 'http://127.0.0.1:3006/marketing/:path*',
       },
-      /*
       {
         source: '/select/:path*',
         destination: 'https://rochaselect-production.up.railway.app/:path*',
@@ -51,7 +50,6 @@ const nextConfig: NextConfig = {
         source: '/crm/:path*',
         destination: 'https://rochacrm-production.up.railway.app/:path*',
       },
-      */
     ];
   },
 };
