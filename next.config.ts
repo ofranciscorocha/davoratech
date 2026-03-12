@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/patiorochaleiloes/:path*',
-        destination: 'https://leilao-patio-rocha-production.up.railway.app/:path*',
+        destination: 'https://leilao-patio-rocha.vercel.app/:path*',
       },
       {
         source: '/licitacoes/:path*',
