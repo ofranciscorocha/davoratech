@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
           ? 'https://rocha-zap-production.up.railway.app/zap/:path*'
           : 'http://127.0.0.1:3005/zap/:path*',
       },
+/*
       {
         source: '/marketing',
         destination: process.env.NODE_ENV === 'production'
@@ -30,6 +31,7 @@ const nextConfig: NextConfig = {
         source: '/select/:path*',
         destination: 'https://rochaselect-production.up.railway.app/:path*',
       },
+*/
       {
         source: '/recicladora/:path*',
         destination: 'http://127.0.0.1:3010/recicladora/:path*',
@@ -42,6 +44,7 @@ const nextConfig: NextConfig = {
         source: '/patiorochaleiloes/:path*',
         destination: 'https://leilao-patio-rocha.vercel.app/patiorochaleiloes/:path*',
       },
+/*
       {
         source: '/licitacoes/:path*',
         destination: 'https://licita-sistem-production.up.railway.app/:path*',
@@ -50,6 +53,7 @@ const nextConfig: NextConfig = {
         source: '/crm/:path*',
         destination: 'https://rochacrm-production.up.railway.app/:path*',
       },
+*/
     ];
   },
 };
