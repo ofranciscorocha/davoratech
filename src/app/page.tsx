@@ -546,6 +546,7 @@ export default function HomePage() {
 
       <nav className="nav" id="nav">
         <a href="#" className="nav-logo">DAVORA <span>TECH</span></a>
+        <a href="#contact" className="nav-mobile-cta">Contato</a>
         <div className="nav-links">
           <a href="#a3">Soluções</a>
           <a href="#a6">Leilão</a>
