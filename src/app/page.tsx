@@ -537,7 +537,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <>
+    <div className="davora-landing">
       <div className="grain"></div>
       <div className="vignette"></div>
       <div className="progress" id="prog"></div>
@@ -682,6 +682,6 @@ export default function HomePage() {
         </div>
         <p className="ft-copy">© 2026 DAVORA TECH</p>
       </footer>
-    </>
+    </div>
   )
 }

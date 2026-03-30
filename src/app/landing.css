@@ -1,7 +1,8 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0c131f;--gold:#2ecc71;--gold-bright:#4ade80;--gold-dim:rgba(46,204,113,.1);--gold-glow:rgba(46,204,113,.25);--gold-soft:rgba(46,204,113,.06);--white:#eae6de;--dim:rgba(234,230,222,.35);--red:#c0392b;--green:#27ae60;--card:rgba(15,24,37,.85);--border:rgba(46,204,113,.08);--fd:'Cormorant Garamond',serif;--fb:'DM Sans',sans-serif;--fm:'IBM Plex Mono',monospace}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);font-family:var(--fb);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body:has(.davora-landing){overflow-x:hidden}
+.davora-landing{background:var(--bg);color:var(--white);font-family:var(--fb);-webkit-font-smoothing:antialiased;min-height:100vh}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
 .grain{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.03;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") repeat;background-size:150px}
 .vignette{position:fixed;inset:0;z-index:8999;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5))}
