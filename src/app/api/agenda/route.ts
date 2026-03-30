@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
-
-const AGENDA_FILE = join('D:/LaFamiglia/engine/data', 'agenda.json')
+import { kvGet, kvSet } from '@/lib/kv'
 
 export interface Nota {
   id: string
@@ -18,20 +15,14 @@ export interface Nota {
 }
 
 export async function GET() {
-  try {
-    const raw = await readFile(AGENDA_FILE, 'utf-8')
-    const notas: Nota[] = JSON.parse(raw)
-    return NextResponse.json(notas)
-  } catch {
-    return NextResponse.json([])
-  }
+  const notas = await kvGet<Nota[]>('admin:agenda', [])
+  return NextResponse.json(notas)
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const raw = await readFile(AGENDA_FILE, 'utf-8').catch(() => '[]')
-    const notas: Nota[] = JSON.parse(raw)
+    const notas = await kvGet<Nota[]>('admin:agenda', [])
 
     const nova: Nota = {
       id: Date.now().toString(),
@@ -47,39 +38,37 @@ export async function POST(req: NextRequest) {
     }
 
     notas.unshift(nova)
-    await writeFile(AGENDA_FILE, JSON.stringify(notas, null, 2), 'utf-8')
+    await kvSet('admin:agenda', notas)
     return NextResponse.json(nova, { status: 201 })
   } catch {
-    return NextResponse.json({ ok: true, warning: 'read-only filesystem' }, { status: 201 })
+    return NextResponse.json({ ok: true, warning: 'storage error' }, { status: 201 })
   }
 }
 
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json()
-    const raw = await readFile(AGENDA_FILE, 'utf-8')
-    const notas: Nota[] = JSON.parse(raw)
+    const notas = await kvGet<Nota[]>('admin:agenda', [])
 
     const idx = notas.findIndex(n => n.id === body.id)
     if (idx === -1) return NextResponse.json({ erro: 'Não encontrado' }, { status: 404 })
 
     notas[idx] = { ...notas[idx], ...body }
-    await writeFile(AGENDA_FILE, JSON.stringify(notas, null, 2), 'utf-8')
+    await kvSet('admin:agenda', notas)
     return NextResponse.json(notas[idx])
   } catch {
-    return NextResponse.json({ ok: true, warning: 'read-only filesystem' })
+    return NextResponse.json({ ok: true, warning: 'storage error' })
   }
 }
 
 export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json()
-    const raw = await readFile(AGENDA_FILE, 'utf-8')
-    const notas: Nota[] = JSON.parse(raw)
+    const notas = await kvGet<Nota[]>('admin:agenda', [])
     const filtrado = notas.filter(n => n.id !== id)
-    await writeFile(AGENDA_FILE, JSON.stringify(filtrado, null, 2), 'utf-8')
+    await kvSet('admin:agenda', filtrado)
     return NextResponse.json({ ok: true })
   } catch {
-    return NextResponse.json({ ok: true, warning: 'read-only filesystem' })
+    return NextResponse.json({ ok: true, warning: 'storage error' })
   }
 }

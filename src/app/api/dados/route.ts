@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
-
-const DATA_DIR = 'D:/LaFamiglia/engine/data'
+import { kvGet } from '@/lib/kv'
 
 interface Projeto {
   id: number
@@ -26,13 +23,10 @@ interface HistoricoEntry {
 
 export async function GET() {
   try {
-    const [projetosRaw, historicoRaw] = await Promise.all([
-      readFile(join(DATA_DIR, 'projetos.json'), 'utf-8'),
-      readFile(join(DATA_DIR, 'historico.json'), 'utf-8'),
+    const [projetos, historico] = await Promise.all([
+      kvGet<Projeto[]>('admin:projetos', []),
+      kvGet<HistoricoEntry[]>('admin:historico', []),
     ])
-
-    const projetos: Projeto[] = JSON.parse(projetosRaw)
-    const historico: HistoricoEntry[] = JSON.parse(historicoRaw)
 
     const total = projetos.length
     const emProgresso = projetos.filter(p =>

@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
-
-const HISTORICO_FILE = join('D:/LaFamiglia/engine/data', 'historico.json')
+import { kvGet, kvSet } from '@/lib/kv'
 
 export interface EntradaHistorico {
   id: string
@@ -26,8 +23,7 @@ export async function GET(req: NextRequest) {
     const filtroTipo = searchParams.get('tipo')
     const limite = Number(searchParams.get('limit') ?? 100)
 
-    const raw = await readFile(HISTORICO_FILE, 'utf-8')
-    let historico: EntradaHistorico[] = JSON.parse(raw)
+    let historico = await kvGet<EntradaHistorico[]>('admin:historico', [])
 
     if (filtroProjeto) historico = historico.filter(e => e.projeto === filtroProjeto)
     if (filtroAgente) historico = historico.filter(e => e.agente === filtroAgente)
@@ -55,8 +51,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const raw = await readFile(HISTORICO_FILE, 'utf-8').catch(() => '[]')
-    const historico: EntradaHistorico[] = JSON.parse(raw)
+    const historico = await kvGet<EntradaHistorico[]>('admin:historico', [])
 
     const nova: EntradaHistorico = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -72,10 +67,10 @@ export async function POST(req: NextRequest) {
     }
 
     historico.push(nova)
-    await writeFile(HISTORICO_FILE, JSON.stringify(historico, null, 2), 'utf-8')
+    await kvSet('admin:historico', historico)
 
     return NextResponse.json({ ok: true, entrada: nova })
   } catch {
-    return NextResponse.json({ ok: true, entrada: null, warning: 'read-only filesystem' })
+    return NextResponse.json({ ok: true, entrada: null, warning: 'storage error' })
   }
 }
