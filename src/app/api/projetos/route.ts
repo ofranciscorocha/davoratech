@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { kvGet, kvSet } from '@/lib/kv'
 
+export async function GET() {
+  const projetos = await kvGet<any[]>('admin:projetos', [])
+  return NextResponse.json(projetos)
+}
+
 // POST /api/projetos — reorder: { ordem: number[] }
 export async function POST(req: NextRequest) {
   try {
