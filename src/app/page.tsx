@@ -587,7 +587,7 @@ export default function HomePage() {
           <div className="tag">Módulo 01 — Logística</div>
           <h2 className="hl">Sistema de<br /><span className="gold">Remoções</span></h2>
           <p className="bd">Controle o recolhimento de veículos com mapa logístico, vistoria e checklist, com fotos e gestão de manutenção dos guinchos e abastecimento. Rastreamento GPS em tempo real. Cada quilômetro documentado, cada rota otimizada.</p>
-          <a href="#" className="mod-btn">Ver mais sobre o módulo →</a>
+          <a href="/modulos/remocoes" className="mod-btn">Ver mais sobre o módulo →</a>
         </div>
       </section>
 
@@ -596,7 +596,7 @@ export default function HomePage() {
           <div className="tag">Módulo 02 — Guarda de Bens</div>
           <h2 className="hl">Sistema de<br /><span className="gold">Pátios</span></h2>
           <p className="bd">Controle de entrada e saída de ativos, vagas mapeadas, com QR Code, relatórios, mapa personalizável do seu pátio, fotos, vídeos, checklist e integração ao sistema do Senatran para consultas e vistorias.</p>
-          <a href="#" className="mod-btn">Ver mais sobre o módulo →</a>
+          <a href="/modulos/patios" className="mod-btn">Ver mais sobre o módulo →</a>
         </div>
       </section>
 
@@ -611,7 +611,7 @@ export default function HomePage() {
             <div className="inspect-item"><div className="il">Vidros</div><div className="iv bad">Parabrisa quebrado</div></div>
             <div className="inspect-item"><div className="il">Pneus</div><div className="iv warn">Meia vida</div></div>
           </div>
-          <a href="#" className="mod-btn">Ver mais sobre o módulo →</a>
+          <a href="/modulos/vistoria" className="mod-btn">Ver mais sobre o módulo →</a>
         </div>
       </section>
 
@@ -635,13 +635,13 @@ export default function HomePage() {
             </div>
             <div className="dash-row">
               <div className="dash-card"><div className="dl">Sinistro</div><div className="dv" style={{ color: '#e8a735' }}>Média Monta</div></div>
-              <div className="dash-card"><div className="dl">Prob. de seguro</div><div className="dv" style={{ color: 'var(--gold)' }}>67%</div></div>
+              <div className="dash-card"><div className="dl">Probabilidade de Seguro</div><div className="dv" style={{ color: 'var(--gold)' }}>67%</div></div>
             </div>
             <div className="dash-row">
               <div className="dash-card" style={{ borderColor: 'rgba(46,204,113,.2)' }}><div className="dl">Status</div><div className="dv" style={{ color: 'var(--green)' }}>Regular</div></div>
             </div>
           </div>
-          <a href="#" className="mod-btn">Ver mais sobre o módulo →</a>
+          <a href="/modulos/consulta" className="mod-btn">Ver mais sobre o módulo →</a>
         </div>
       </section>
 
@@ -657,7 +657,7 @@ export default function HomePage() {
               <div className="bid-count" id="bidCount">0 lances</div>
             </div>
           </div>
-          <a href="#" className="mod-btn" style={{ marginTop: '20px' }}>Ver mais sobre o módulo →</a>
+          <a href="/modulos/leilao" className="mod-btn" style={{ marginTop: '20px' }}>Ver mais sobre o módulo →</a>
         </div>
       </section>
 
@@ -668,6 +668,44 @@ export default function HomePage() {
           <p className="bd" style={{ textAlign: 'center', margin: '0 auto 32px' }}>Fale com a DAVORA TECH.</p>
           <a href="mailto:contato@davoratech.com.br" style={{ display: 'inline-block', padding: '18px 48px', background: 'var(--gold)', color: 'var(--bg)', borderRadius: '100px', textDecoration: 'none', fontWeight: 700, fontSize: '.85rem', letterSpacing: '2px', textTransform: 'uppercase', boxShadow: '0 4px 30px var(--gold-glow)' }}>
             Fale Conosco
+          </a>
+        </div>
+      </section>
+
+      <section className="portfolio">
+        <div className="portfolio-label">— Portfólio —</div>
+        <h2 className="portfolio-title">Sistemas já <span className="gold">desenvolvidos</span></h2>
+        <div className="portfolio-grid">
+          <a href="https://www.atelielauraverissimo.com.br" target="_blank" rel="noreferrer" className="portfolio-card">
+            <div className="portfolio-card-img-placeholder">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="30" stroke="rgba(46,204,113,.15)" strokeWidth="1"/>
+                <path d="M20 44 Q32 20 44 44" stroke="rgba(46,204,113,.4)" strokeWidth="1.5" fill="none"/>
+                <circle cx="32" cy="24" r="6" stroke="rgba(46,204,113,.4)" strokeWidth="1.5" fill="none"/>
+              </svg>
+            </div>
+            <div className="portfolio-card-body">
+              <div className="portfolio-card-tag">E-commerce · Artesanato</div>
+              <div className="portfolio-card-name">Ateliê Laura Veríssimo</div>
+              <p className="portfolio-card-desc">Produção artesanal em vidro e porcelana com e-commerce integrado para vendas em todo o Brasil.</p>
+              <span className="portfolio-card-url">atelielauraverissimo.com.br</span>
+            </div>
+          </a>
+          <a href="https://www.arremateclub.com.br" target="_blank" rel="noreferrer" className="portfolio-card">
+            <div className="portfolio-card-img-placeholder">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="30" stroke="rgba(46,204,113,.15)" strokeWidth="1"/>
+                <path d="M18 40 L32 18 L46 40 Z" stroke="rgba(46,204,113,.4)" strokeWidth="1.5" fill="none"/>
+                <line x1="24" y1="40" x2="40" y2="40" stroke="rgba(46,204,113,.3)" strokeWidth="1"/>
+                <circle cx="32" cy="44" r="3" stroke="rgba(46,204,113,.4)" strokeWidth="1.5" fill="none"/>
+              </svg>
+            </div>
+            <div className="portfolio-card-body">
+              <div className="portfolio-card-tag">Plataforma · Leilões</div>
+              <div className="portfolio-card-name">Arremate Club</div>
+              <p className="portfolio-card-desc">Agregador de leilões de veículos com busca inteligente, filtros avançados e monitoramento de lotes.</p>
+              <span className="portfolio-card-url">arremateclub.com.br</span>
+            </div>
           </a>
         </div>
       </section>

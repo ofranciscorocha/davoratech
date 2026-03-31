@@ -1,24 +1,12 @@
-import { Redis } from '@upstash/redis'
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || '',
-})
+// Stub para build — APIs de seed/serve são internas e não rodam no Vercel
+const store: Record<string, unknown> = {}
 
 export async function kvGet<T>(key: string, fallback: T): Promise<T> {
-  try {
-    const data = await redis.get<T>(key)
-    return data ?? fallback
-  } catch {
-    return fallback
-  }
+  return (store[key] as T) ?? fallback
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function kvSet(key: string, value: any): Promise<boolean> {
-  try {
-    await redis.set(key, value)
-    return true
-  } catch {
-    return false
-  }
+  store[key] = value
+  return true
 }
